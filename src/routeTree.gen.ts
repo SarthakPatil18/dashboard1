@@ -12,10 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TimetablesRouteImport } from './routes/timetables'
 import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as StudentsRouteImport } from './routes/students'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RoomsRouteImport } from './routes/rooms'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as FacultyRouteImport } from './routes/faculty'
 import { Route as ConstraintsRouteImport } from './routes/constraints'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TimetablesRoute = TimetablesRouteImport.update({
@@ -33,9 +37,24 @@ const StudentsRoute = StudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoomsRoute = RoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GenerateRoute = GenerateRouteImport.update({
@@ -53,6 +72,11 @@ const ConstraintsRoute = ConstraintsRouteImport.update({
   path: '/constraints',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,20 +85,28 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/constraints': typeof ConstraintsRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
+  '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
+  '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
   '/timetables': typeof TimetablesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/constraints': typeof ConstraintsRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
+  '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
+  '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
   '/timetables': typeof TimetablesRoute
@@ -82,10 +114,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
   '/constraints': typeof ConstraintsRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
+  '/reports': typeof ReportsRoute
   '/rooms': typeof RoomsRoute
+  '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
   '/timetables': typeof TimetablesRoute
@@ -94,30 +130,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analytics'
     | '/constraints'
     | '/faculty'
     | '/generate'
+    | '/reports'
     | '/rooms'
+    | '/settings'
+    | '/sitemap.xml'
     | '/students'
     | '/subjects'
     | '/timetables'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/analytics'
     | '/constraints'
     | '/faculty'
     | '/generate'
+    | '/reports'
     | '/rooms'
+    | '/settings'
+    | '/sitemap.xml'
     | '/students'
     | '/subjects'
     | '/timetables'
   id:
     | '__root__'
     | '/'
+    | '/analytics'
     | '/constraints'
     | '/faculty'
     | '/generate'
+    | '/reports'
     | '/rooms'
+    | '/settings'
+    | '/sitemap.xml'
     | '/students'
     | '/subjects'
     | '/timetables'
@@ -125,10 +173,14 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticsRoute: typeof AnalyticsRoute
   ConstraintsRoute: typeof ConstraintsRoute
   FacultyRoute: typeof FacultyRoute
   GenerateRoute: typeof GenerateRoute
+  ReportsRoute: typeof ReportsRoute
   RoomsRoute: typeof RoomsRoute
+  SettingsRoute: typeof SettingsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StudentsRoute: typeof StudentsRoute
   SubjectsRoute: typeof SubjectsRoute
   TimetablesRoute: typeof TimetablesRoute
@@ -157,11 +209,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rooms': {
       id: '/rooms'
       path: '/rooms'
       fullPath: '/rooms'
       preLoaderRoute: typeof RoomsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/generate': {
@@ -185,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConstraintsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,10 +277,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticsRoute: AnalyticsRoute,
   ConstraintsRoute: ConstraintsRoute,
   FacultyRoute: FacultyRoute,
   GenerateRoute: GenerateRoute,
+  ReportsRoute: ReportsRoute,
   RoomsRoute: RoomsRoute,
+  SettingsRoute: SettingsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StudentsRoute: StudentsRoute,
   SubjectsRoute: SubjectsRoute,
   TimetablesRoute: TimetablesRoute,
