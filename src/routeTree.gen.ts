@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as FacultyRouteImport } from './routes/faculty'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SubjectsRoute = SubjectsRouteImport.update({
+  id: '/subjects',
+  path: '/subjects',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoomsRoute = RoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
+  '/subjects': typeof SubjectsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
+  '/subjects': typeof SubjectsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
+  '/subjects': typeof SubjectsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faculty' | '/generate' | '/rooms'
+  fullPaths: '/' | '/faculty' | '/generate' | '/rooms' | '/subjects'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faculty' | '/generate' | '/rooms'
-  id: '__root__' | '/' | '/faculty' | '/generate' | '/rooms'
+  to: '/' | '/faculty' | '/generate' | '/rooms' | '/subjects'
+  id: '__root__' | '/' | '/faculty' | '/generate' | '/rooms' | '/subjects'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +76,18 @@ export interface RootRouteChildren {
   FacultyRoute: typeof FacultyRoute
   GenerateRoute: typeof GenerateRoute
   RoomsRoute: typeof RoomsRoute
+  SubjectsRoute: typeof SubjectsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/subjects': {
+      id: '/subjects'
+      path: '/subjects'
+      fullPath: '/subjects'
+      preLoaderRoute: typeof SubjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rooms': {
       id: '/rooms'
       path: '/rooms'
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   FacultyRoute: FacultyRoute,
   GenerateRoute: GenerateRoute,
   RoomsRoute: RoomsRoute,
+  SubjectsRoute: SubjectsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
