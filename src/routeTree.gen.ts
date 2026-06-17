@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubjectsRouteImport } from './routes/subjects'
+import { Route as StudentsRouteImport } from './routes/students'
 import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as FacultyRouteImport } from './routes/faculty'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SubjectsRoute = SubjectsRouteImport.update({
   id: '/subjects',
   path: '/subjects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentsRoute = StudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoomsRoute = RoomsRouteImport.update({
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
+  '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
+  '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,28 @@ export interface FileRoutesById {
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
+  '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faculty' | '/generate' | '/rooms' | '/subjects'
+  fullPaths:
+    | '/'
+    | '/faculty'
+    | '/generate'
+    | '/rooms'
+    | '/students'
+    | '/subjects'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faculty' | '/generate' | '/rooms' | '/subjects'
-  id: '__root__' | '/' | '/faculty' | '/generate' | '/rooms' | '/subjects'
+  to: '/' | '/faculty' | '/generate' | '/rooms' | '/students' | '/subjects'
+  id:
+    | '__root__'
+    | '/'
+    | '/faculty'
+    | '/generate'
+    | '/rooms'
+    | '/students'
+    | '/subjects'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +98,7 @@ export interface RootRouteChildren {
   FacultyRoute: typeof FacultyRoute
   GenerateRoute: typeof GenerateRoute
   RoomsRoute: typeof RoomsRoute
+  StudentsRoute: typeof StudentsRoute
   SubjectsRoute: typeof SubjectsRoute
 }
 
@@ -86,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/subjects'
       fullPath: '/subjects'
       preLoaderRoute: typeof SubjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/students': {
+      id: '/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof StudentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rooms': {
@@ -124,6 +154,7 @@ const rootRouteChildren: RootRouteChildren = {
   FacultyRoute: FacultyRoute,
   GenerateRoute: GenerateRoute,
   RoomsRoute: RoomsRoute,
+  StudentsRoute: StudentsRoute,
   SubjectsRoute: SubjectsRoute,
 }
 export const routeTree = rootRouteImport
