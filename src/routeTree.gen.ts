@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as FacultyRouteImport } from './routes/faculty'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RoomsRoute = RoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GenerateRoute = GenerateRouteImport.update({
   id: '/generate',
   path: '/generate',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
+  '/rooms': typeof RoomsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
+  '/rooms': typeof RoomsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
+  '/rooms': typeof RoomsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faculty' | '/generate'
+  fullPaths: '/' | '/faculty' | '/generate' | '/rooms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faculty' | '/generate'
-  id: '__root__' | '/' | '/faculty' | '/generate'
+  to: '/' | '/faculty' | '/generate' | '/rooms'
+  id: '__root__' | '/' | '/faculty' | '/generate' | '/rooms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FacultyRoute: typeof FacultyRoute
   GenerateRoute: typeof GenerateRoute
+  RoomsRoute: typeof RoomsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rooms': {
+      id: '/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof RoomsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/generate': {
       id: '/generate'
       path: '/generate'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FacultyRoute: FacultyRoute,
   GenerateRoute: GenerateRoute,
+  RoomsRoute: RoomsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
