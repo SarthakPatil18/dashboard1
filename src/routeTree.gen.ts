@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TimetablesRouteImport } from './routes/timetables'
 import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as StudentsRouteImport } from './routes/students'
 import { Route as RoomsRouteImport } from './routes/rooms'
@@ -16,6 +17,11 @@ import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as FacultyRouteImport } from './routes/faculty'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TimetablesRoute = TimetablesRouteImport.update({
+  id: '/timetables',
+  path: '/timetables',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubjectsRoute = SubjectsRouteImport.update({
   id: '/subjects',
   path: '/subjects',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/rooms': typeof RoomsRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
+  '/timetables': typeof TimetablesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/rooms': typeof RoomsRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
+  '/timetables': typeof TimetablesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/rooms': typeof RoomsRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
+  '/timetables': typeof TimetablesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,8 +90,16 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/students'
     | '/subjects'
+    | '/timetables'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faculty' | '/generate' | '/rooms' | '/students' | '/subjects'
+  to:
+    | '/'
+    | '/faculty'
+    | '/generate'
+    | '/rooms'
+    | '/students'
+    | '/subjects'
+    | '/timetables'
   id:
     | '__root__'
     | '/'
@@ -91,6 +108,7 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/students'
     | '/subjects'
+    | '/timetables'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,10 +118,18 @@ export interface RootRouteChildren {
   RoomsRoute: typeof RoomsRoute
   StudentsRoute: typeof StudentsRoute
   SubjectsRoute: typeof SubjectsRoute
+  TimetablesRoute: typeof TimetablesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/timetables': {
+      id: '/timetables'
+      path: '/timetables'
+      fullPath: '/timetables'
+      preLoaderRoute: typeof TimetablesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/subjects': {
       id: '/subjects'
       path: '/subjects'
@@ -156,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoomsRoute: RoomsRoute,
   StudentsRoute: StudentsRoute,
   SubjectsRoute: SubjectsRoute,
+  TimetablesRoute: TimetablesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
