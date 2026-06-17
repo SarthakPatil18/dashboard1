@@ -15,6 +15,7 @@ import { Route as StudentsRouteImport } from './routes/students'
 import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as FacultyRouteImport } from './routes/faculty'
+import { Route as ConstraintsRouteImport } from './routes/constraints'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TimetablesRoute = TimetablesRouteImport.update({
@@ -47,6 +48,11 @@ const FacultyRoute = FacultyRouteImport.update({
   path: '/faculty',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConstraintsRoute = ConstraintsRouteImport.update({
+  id: '/constraints',
+  path: '/constraints',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +61,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/constraints': typeof ConstraintsRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/constraints': typeof ConstraintsRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/constraints': typeof ConstraintsRoute
   '/faculty': typeof FacultyRoute
   '/generate': typeof GenerateRoute
   '/rooms': typeof RoomsRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/constraints'
     | '/faculty'
     | '/generate'
     | '/rooms'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/constraints'
     | '/faculty'
     | '/generate'
     | '/rooms'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/constraints'
     | '/faculty'
     | '/generate'
     | '/rooms'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConstraintsRoute: typeof ConstraintsRoute
   FacultyRoute: typeof FacultyRoute
   GenerateRoute: typeof GenerateRoute
   RoomsRoute: typeof RoomsRoute
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FacultyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/constraints': {
+      id: '/constraints'
+      path: '/constraints'
+      fullPath: '/constraints'
+      preLoaderRoute: typeof ConstraintsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConstraintsRoute: ConstraintsRoute,
   FacultyRoute: FacultyRoute,
   GenerateRoute: GenerateRoute,
   RoomsRoute: RoomsRoute,
