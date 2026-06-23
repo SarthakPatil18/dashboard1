@@ -13,6 +13,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from "recharts";
 import {
   facultyWorkload,
@@ -34,18 +35,13 @@ export function FacultyWorkloadChart() {
   return (
     <ResponsiveContainer width="100%" height={260}>
       <BarChart data={facultyWorkload} barGap={4}>
-        <defs>
-          <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--primary-glow)" />
-            <stop offset="100%" stopColor="var(--primary)" />
-          </linearGradient>
-        </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-        <XAxis dataKey="name" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--secondary)" }} />
-        <Bar dataKey="ideal" fill="var(--secondary)" radius={[6, 6, 0, 0]} name="Ideal" />
-        <Bar dataKey="load" fill="url(#barGrad)" radius={[6, 6, 0, 0]} name="Assigned" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+        <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "#f9fafb" }} />
+        <Legend verticalAlign="bottom" height={36} iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11, color: "#9ca3af", paddingTop: 10 }} />
+        <Bar dataKey="ideal" fill="var(--chart-2)" radius={[6, 6, 0, 0]} name="Ideal" />
+        <Bar dataKey="load" fill="var(--chart-1)" radius={[6, 6, 0, 0]} name="Assigned" />
       </BarChart>
     </ResponsiveContainer>
   );
@@ -62,8 +58,8 @@ export function RoomUtilizationChart() {
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} unit="%" />
+        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888888" }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fontSize: 11, fill: "#888888" }} axisLine={false} tickLine={false} unit="%" />
         <Tooltip contentStyle={tooltipStyle} />
         <Area
           type="monotone"
@@ -83,8 +79,8 @@ export function OptimizationTrendChart() {
     <ResponsiveContainer width="100%" height={220}>
       <LineChart data={optimizationTrend}>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-        <XAxis dataKey="gen" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-        <YAxis domain={[50, 100]} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} unit="%" />
+        <XAxis dataKey="gen" tick={{ fontSize: 11, fill: "#888888" }} axisLine={false} tickLine={false} />
+        <YAxis domain={[50, 100]} tick={{ fontSize: 11, fill: "#888888" }} axisLine={false} tickLine={false} unit="%" />
         <Tooltip contentStyle={tooltipStyle} />
         <Line
           type="monotone"

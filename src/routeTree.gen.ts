@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TimetablesRouteImport } from './routes/timetables'
+import { Route as TimetablePreviewRouteImport } from './routes/timetable-preview'
 import { Route as SubjectsRouteImport } from './routes/subjects'
 import { Route as StudentsRouteImport } from './routes/students'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -25,6 +26,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TimetablesRoute = TimetablesRouteImport.update({
   id: '/timetables',
   path: '/timetables',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimetablePreviewRoute = TimetablePreviewRouteImport.update({
+  id: '/timetable-preview',
+  path: '/timetable-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubjectsRoute = SubjectsRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
+  '/timetable-preview': typeof TimetablePreviewRoute
   '/timetables': typeof TimetablesRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
+  '/timetable-preview': typeof TimetablePreviewRoute
   '/timetables': typeof TimetablesRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/students': typeof StudentsRoute
   '/subjects': typeof SubjectsRoute
+  '/timetable-preview': typeof TimetablePreviewRoute
   '/timetables': typeof TimetablesRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/students'
     | '/subjects'
+    | '/timetable-preview'
     | '/timetables'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/students'
     | '/subjects'
+    | '/timetable-preview'
     | '/timetables'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/students'
     | '/subjects'
+    | '/timetable-preview'
     | '/timetables'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +195,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StudentsRoute: typeof StudentsRoute
   SubjectsRoute: typeof SubjectsRoute
+  TimetablePreviewRoute: typeof TimetablePreviewRoute
   TimetablesRoute: typeof TimetablesRoute
 }
 
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/timetables'
       fullPath: '/timetables'
       preLoaderRoute: typeof TimetablesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timetable-preview': {
+      id: '/timetable-preview'
+      path: '/timetable-preview'
+      fullPath: '/timetable-preview'
+      preLoaderRoute: typeof TimetablePreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subjects': {
@@ -287,8 +307,19 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StudentsRoute: StudentsRoute,
   SubjectsRoute: SubjectsRoute,
+  TimetablePreviewRoute: TimetablePreviewRoute,
   TimetablesRoute: TimetablesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -18,18 +18,12 @@ export function ScoreRing({
   return (
     <div className="relative grid place-items-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <defs>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--primary)" />
-            <stop offset="100%" stopColor="var(--primary-glow)" />
-          </linearGradient>
-        </defs>
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="var(--secondary)"
+          stroke="#e5e7eb"
           strokeWidth={stroke}
         />
         <circle
@@ -37,7 +31,7 @@ export function ScoreRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="url(#ringGrad)"
+          stroke="var(--primary)"
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circ}
@@ -46,8 +40,8 @@ export function ScoreRing({
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="font-display text-3xl font-bold">{label ?? `${value}%`}</span>
-        {sublabel && <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{sublabel}</span>}
+        <span className="font-display text-3xl font-semibold text-[#1f2937] dark:text-card-foreground">{label ?? `${value}%`}</span>
+        {sublabel && <span className="text-[10px] font-semibold uppercase tracking-wider text-[#1f2937]/70 dark:text-card-foreground/70">{sublabel}</span>}
       </div>
     </div>
   );

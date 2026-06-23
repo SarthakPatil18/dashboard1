@@ -48,17 +48,17 @@ export function DataTable<T extends Record<string, unknown>>({
 
 export function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    Optimal: "bg-success/10 text-success",
-    Active: "bg-success/10 text-success",
-    Underloaded: "bg-info/10 text-info",
-    Overloaded: "bg-destructive/10 text-destructive",
-    Overbooked: "bg-destructive/10 text-destructive",
-    Theory: "bg-chart-1/10 text-primary",
-    Lab: "bg-chart-3/10 text-info",
-    Elective: "bg-chart-5/15 text-warning",
+    Optimal: "bg-[#E1F5EE] text-[#0F6E56]",
+    Active: "bg-[#E1F5EE] text-[#0F6E56]",
+    Underloaded: "bg-[#F1EFE8] text-[#5F5E5A]",
+    Overloaded: "bg-[#FCEBEB] text-[#A32D2D]",
+    Overbooked: "bg-[#FCEBEB] text-[#A32D2D]",
+    Theory: "bg-[#EEEDFE] text-[#3C3489]",
+    Lab: "bg-[#E1F5EE] text-[#0F6E56]",
+    Elective: "bg-[#FAEEDA] text-[#854F0B]",
   };
   return (
-    <span className={cn("rounded-full px-2.5 py-1 text-xs font-medium", map[status] ?? "bg-secondary text-muted-foreground")}>
+    <span className={cn("rounded-full px-2.5 py-1 text-xs font-medium", map[status] ?? "bg-[#F1EFE8] text-[#5F5E5A]")}>
       {status}
     </span>
   );

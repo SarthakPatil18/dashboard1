@@ -61,13 +61,16 @@ export interface Slot {
 
 export const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const periods = [
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
+  "08:30–09:25",
+  "09:25–10:20",
+  "10:30–11:25",
+  "11:25–12:20",
+  "13:15–14:10",
+  "14:10–15:05",
+  "15:10–16:00",
+  "16:00–16:50",
+  "16:55–17:45",
+  "17:45–18:35"
 ];
 
 // timetable[day][periodIndex]
@@ -76,10 +79,10 @@ export const timetable: Record<string, (Slot | null)[]> = {
     { subject: "Data Structures", faculty: "Dr. Mehra", room: "A-201", type: "theory" },
     { subject: "DBMS", faculty: "Prof. Iyer", room: "A-204", type: "theory" },
     { subject: "OS Lab", faculty: "Dr. Khan", room: "Lab-3", type: "lab" },
-    null,
+    { subject: "OS Lab", faculty: "Dr. Khan", room: "Lab-3", type: "lab" },
     { subject: "Machine Learning", faculty: "Dr. Rao", room: "B-101", type: "elective" },
     { subject: "Networks", faculty: "Prof. Das", room: "A-201", type: "theory" },
-    null,
+    null, null, null, null
   ],
   Tue: [
     { subject: "DBMS Lab", faculty: "Prof. Iyer", room: "Lab-1", type: "lab" },
@@ -89,15 +92,16 @@ export const timetable: Record<string, (Slot | null)[]> = {
     { subject: "Cloud Computing", faculty: "Dr. Nair", room: "B-104", type: "elective" },
     { subject: "Networks", faculty: "Prof. Das", room: "A-201", type: "theory" },
     { subject: "Maths III", faculty: "Prof. Bose", room: "A-205", type: "theory" },
+    null, null, null
   ],
   Wed: [
     { subject: "Algorithms", faculty: "Dr. Mehra", room: "A-202", type: "theory" },
     { subject: "OS", faculty: "Dr. Khan", room: "A-203", type: "theory" },
     { subject: "ML Lab", faculty: "Dr. Rao", room: "Lab-2", type: "lab" },
-    null,
     { subject: "ML Lab", faculty: "Dr. Rao", room: "Lab-2", type: "lab" },
-    { subject: "Maths III", faculty: "Prof. Bose", room: "A-205", type: "theory" },
     null,
+    { subject: "Maths III", faculty: "Prof. Bose", room: "A-205", type: "theory" },
+    null, null, null, null
   ],
   Thu: [
     { subject: "Networks Lab", faculty: "Prof. Das", room: "Lab-4", type: "lab" },
@@ -107,6 +111,7 @@ export const timetable: Record<string, (Slot | null)[]> = {
     { subject: "Blockchain", faculty: "Dr. Nair", room: "B-104", type: "elective" },
     { subject: "Data Structures", faculty: "Dr. Mehra", room: "A-201", type: "theory" },
     { subject: "Data Structures", faculty: "Dr. Mehra", room: "A-201", type: "theory" },
+    null, null, null
   ],
   Fri: [
     { subject: "Machine Learning", faculty: "Dr. Rao", room: "B-101", type: "elective" },
@@ -115,16 +120,13 @@ export const timetable: Record<string, (Slot | null)[]> = {
     null,
     { subject: "OS Lab", faculty: "Dr. Khan", room: "Lab-3", type: "lab" },
     { subject: "OS Lab", faculty: "Dr. Khan", room: "Lab-3", type: "lab" },
-    null,
+    null, null, null, null
   ],
   Sat: [
     { subject: "Seminar", faculty: "Prof. Bose", room: "Audi-1", type: "elective" },
     { subject: "Maths III", faculty: "Prof. Bose", room: "A-205", type: "theory" },
     { subject: "Networks", faculty: "Prof. Das", room: "A-201", type: "theory" },
-    null,
-    null,
-    null,
-    null,
+    null, null, null, null, null, null, null
   ],
 };
 

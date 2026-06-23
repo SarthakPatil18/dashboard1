@@ -1,0 +1,759 @@
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronDown, ChevronLeft, ChevronRight, Search, Sparkles, Sun, Moon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useCampusData } from "@/hooks/useCampusData";
+
+// Types
+export interface TimetableEvent {
+  day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
+  startTime: string; // "hh:mm" format (e.g. "08:00")
+  endTime: string;   // "hh:mm" format (e.g. "08:50")
+  courseCode?: string;
+  courseName: string;
+  professor?: string;
+  room?: string;
+  category: "theory" | "lab" | "elective";
+}
+
+// Helper to convert time string (e.g. "08:30") to minutes since 8:00 AM
+const timeToMinutes = (timeStr: string): number => {
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  return (hours - 8) * 60 + minutes;
+};
+
+// Mock data matching the reference image and supporting multiple weeks
+export const weeksEventData: Record<string, TimetableEvent[]> = {
+  "Nov 1–6": [
+    // Monday
+    {
+      day: "Monday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseCode: "CSC401",
+      courseName: "Data Structures",
+      professor: "Prof. Smith",
+      room: "R301",
+      category: "theory",
+    },
+    {
+      day: "Monday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Theory Lab Lecture",
+      category: "theory",
+    },
+    {
+      day: "Monday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseName: "Elective Lecture Lecture",
+      category: "elective",
+    },
+    // Tuesday
+    {
+      day: "Tuesday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseCode: "CSC401",
+      courseName: "Data Structures",
+      professor: "Prof. Smith",
+      room: "R301",
+      category: "theory",
+    },
+    {
+      day: "Tuesday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseCode: "BIO201",
+      courseName: "Cell Biology Lab",
+      professor: "Dr. Jones",
+      room: "R405",
+      category: "lab",
+    },
+    {
+      day: "Tuesday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseName: "Lab Lab Lecture",
+      category: "lab",
+    },
+    {
+      day: "Tuesday",
+      startTime: "11:00",
+      endTime: "11:50",
+      courseName: "Theory Lab Lecture",
+      category: "theory",
+    },
+    // Wednesday
+    {
+      day: "Wednesday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseName: "Theory - Lab Biology",
+      professor: "Prof. Smith",
+      room: "R301",
+      category: "elective",
+    },
+    {
+      day: "Wednesday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseName: "Thouny Lab Lecture",
+      category: "theory",
+    },
+    // Thursday
+    {
+      day: "Thursday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseName: "Lab Lab Lecture",
+      professor: "Dr. Jones",
+      room: "R405",
+      category: "lab",
+    },
+    {
+      day: "Thursday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Theory Lab Lecture",
+      category: "lab",
+    },
+    {
+      day: "Thursday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseCode: "HIS110",
+      courseName: "World History",
+      professor: "Dr. Evans",
+      room: "R112",
+      category: "elective",
+    },
+    {
+      day: "Thursday",
+      startTime: "11:00",
+      endTime: "11:50",
+      courseName: "Theory Lab Lecture",
+      category: "lab",
+    },
+    // Friday
+    {
+      day: "Friday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseName: "Theory - Lab Lecture",
+      room: "R301",
+      category: "theory",
+    },
+    {
+      day: "Friday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Elective Lecture Lecture",
+      category: "theory",
+    },
+    {
+      day: "Friday",
+      startTime: "11:00",
+      endTime: "11:50",
+      courseCode: "ENG210",
+      courseName: "Creative Writing",
+      professor: "Prof. Davis",
+      room: "R210",
+      category: "theory",
+    },
+  ],
+  "Nov 8–13": [
+    // Monday
+    {
+      day: "Monday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseCode: "CSC401",
+      courseName: "Data Structures",
+      professor: "Prof. Smith",
+      room: "R301",
+      category: "theory",
+    },
+    {
+      day: "Monday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Theory Lab Lecture",
+      category: "theory",
+    },
+    // Tuesday
+    {
+      day: "Tuesday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseCode: "BIO201",
+      courseName: "Cell Biology Lab",
+      professor: "Dr. Jones",
+      room: "R405",
+      category: "lab",
+    },
+    {
+      day: "Tuesday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseName: "Lab Lab Lecture",
+      category: "lab",
+    },
+    // Wednesday
+    {
+      day: "Wednesday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseName: "Theory - Lab Biology",
+      professor: "Prof. Smith",
+      room: "R301",
+      category: "elective",
+    },
+    {
+      day: "Wednesday",
+      startTime: "11:00",
+      endTime: "11:50",
+      courseCode: "MTH301",
+      courseName: "Advanced Calculus",
+      professor: "Prof. Johnson",
+      room: "R102",
+      category: "theory",
+    },
+    // Thursday
+    {
+      day: "Thursday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseName: "Lab Lab Lecture",
+      professor: "Dr. Jones",
+      room: "R405",
+      category: "lab",
+    },
+    {
+      day: "Thursday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseCode: "HIS110",
+      courseName: "World History",
+      professor: "Dr. Evans",
+      room: "R112",
+      category: "elective",
+    },
+    // Friday
+    {
+      day: "Friday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseName: "Theory - Lab Lecture",
+      room: "R301",
+      category: "theory",
+    },
+    {
+      day: "Friday",
+      startTime: "11:00",
+      endTime: "11:50",
+      courseCode: "ENG210",
+      courseName: "Creative Writing",
+      professor: "Prof. Davis",
+      room: "R210",
+      category: "theory",
+    },
+  ],
+  "Nov 15–20": [
+    // Monday
+    {
+      day: "Monday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Theory Lab Lecture",
+      category: "theory",
+    },
+    {
+      day: "Monday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseName: "Elective Lecture Lecture",
+      category: "elective",
+    },
+    // Tuesday
+    {
+      day: "Tuesday",
+      startTime: "08:00",
+      endTime: "08:50",
+      courseCode: "CSC401",
+      courseName: "Data Structures",
+      professor: "Prof. Smith",
+      room: "R301",
+      category: "theory",
+    },
+    // Wednesday
+    {
+      day: "Wednesday",
+      startTime: "10:00",
+      endTime: "10:50",
+      courseName: "Thouny Lab Lecture",
+      category: "theory",
+    },
+    // Thursday
+    {
+      day: "Thursday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Theory Lab Lecture",
+      category: "lab",
+    },
+    {
+      day: "Thursday",
+      startTime: "11:00",
+      endTime: "11:50",
+      courseName: "Theory Lab Lecture",
+      category: "lab",
+    },
+    // Friday
+    {
+      day: "Friday",
+      startTime: "09:00",
+      endTime: "09:50",
+      courseName: "Elective Lecture Lecture",
+      category: "theory",
+    },
+  ],
+};
+
+const daysOfWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+] as const;
+
+const timeLabels = ["8 AM", "9 AM", "10 AM", "11 AM", "12 AM"];
+
+// Category styles mapping based on the 8 course-differentiating colors
+const getCategoryClasses = (event: TimetableEvent) => {
+  const name = event.courseName.toLowerCase();
+  const code = event.courseCode?.toLowerCase() || "";
+
+  // 1. Amber (CSC401 - Data Structures)
+  if (name.includes("data structures") || code.includes("csc401")) {
+    return {
+      card: "bg-[#fef3c7] border border-[#fcd34d] text-[#78350f] hover:bg-[#fde68a] hover:border-[#fbbf24] dark:bg-[#fef3c7]/15 dark:border-[#fcd34d]/40 dark:text-[#fcd34d]",
+      dot: "bg-[#d97706]",
+      tag: "bg-[#d97706] text-white",
+      sub: "text-[#78350f]/80 dark:text-[#d1d5db]",
+    };
+  }
+  // 2. Emerald (BIO201 - Cell Biology Lab)
+  if (name.includes("cell biology") || code.includes("bio201")) {
+    return {
+      card: "bg-[#d1fae5] border border-[#6ee7b7] text-[#064e3b] hover:bg-[#a7f3d0] hover:border-[#34d399] dark:bg-[#d1fae5]/15 dark:border-[#6ee7b7]/40 dark:text-[#6ee7b7]",
+      dot: "bg-[#059669]",
+      tag: "bg-[#059669] text-white",
+      sub: "text-[#064e3b]/80 dark:text-[#d1d5db]",
+    };
+  }
+  // 3. Orange (HIS110 - World History)
+  if (name.includes("world history") || code.includes("his110")) {
+    return {
+      card: "bg-[#ffedd5] border border-[#fdba74] text-[#7c2d12] hover:bg-[#fed7aa] hover:border-[#f97316] dark:bg-[#ffedd5]/15 dark:border-[#fdba74]/40 dark:text-[#fdba74]",
+      dot: "bg-[#ea580c]",
+      tag: "bg-[#ea580c] text-white",
+      sub: "text-[#7c2d12]/80 dark:text-[#d1d5db]",
+    };
+  }
+  // 4. Teal (ENG210 - Creative Writing)
+  if (name.includes("creative writing") || code.includes("eng210")) {
+    return {
+      card: "bg-[#ccfbf1] border border-[#5eead4] text-[#134e4a] hover:bg-[#99f6e4] hover:border-[#14b8a6] dark:bg-[#ccfbf1]/15 dark:border-[#5eead4]/40 dark:text-[#5eead4]",
+      dot: "bg-[#0d9488]",
+      tag: "bg-[#0d9488] text-white",
+      sub: "text-[#134e4a]/85 dark:text-[#d1d5db]",
+    };
+  }
+  // 5. Rose (Theory - Lab Biology)
+  if (name.includes("theory - lab biology")) {
+    return {
+      card: "bg-[#ffe4e6] border border-[#fda4af] text-[#881337] hover:bg-[#fecdd3] hover:border-[#f43f5e] dark:bg-[#ffe4e6]/15 dark:border-[#fda4af]/40 dark:text-[#fda4af]",
+      dot: "bg-[#e11d48]",
+      tag: "bg-[#e11d48] text-white",
+      sub: "text-[#881337]/80 dark:text-[#d1d5db]",
+    };
+  }
+  // 6. Cyan (Lab Lab Lecture)
+  if (name.includes("lab lab lecture")) {
+    return {
+      card: "bg-[#cffafe] border border-[#67e8f9] text-[#164e63] hover:bg-[#a5f3fc] hover:border-[#22d3ee] dark:bg-[#cffafe]/15 dark:border-[#67e8f9]/40 dark:text-[#67e8f9]",
+      dot: "bg-[#0891b2]",
+      tag: "bg-[#0891b2] text-white",
+      sub: "text-[#164e63]/80 dark:text-[#d1d5db]",
+    };
+  }
+  // 7. Pink (Elective Lecture Lecture)
+  if (name.includes("elective lecture lecture")) {
+    return {
+      card: "bg-[#fce7f3] border border-[#f9a8d4] text-[#831843] hover:bg-[#fbcfe8] hover:border-[#ec4899] dark:bg-[#fce7f3]/15 dark:border-[#f9a8d4]/40 dark:text-[#f9a8d4]",
+      dot: "bg-[#db2777]",
+      tag: "bg-[#db2777] text-white",
+      sub: "text-[#831843]/80 dark:text-[#d1d5db]",
+    };
+  }
+  // 8. Violet (Default/Theory Lab Lecture)
+  return {
+    card: "bg-[#ede9fe] border border-[#c4b5fd] text-[#5b21b6] hover:bg-[#ddd6fe] hover:border-[#a78bfa] dark:bg-[#ede9fe]/15 dark:border-[#c4b5fd]/40 dark:text-[#c4b5fd]",
+    dot: "bg-[#7c3aed]",
+    tag: "bg-[#7c3aed] text-white",
+    sub: "text-[#5b21b6]/85 dark:text-[#d1d5db]",
+  };
+};
+
+// Subcomponent: TimetableHeader
+interface TimetableHeaderProps {
+  currentWeek: string;
+  availableWeeks: string[];
+  onWeekChange: (week: string) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  isDark: boolean;
+  onToggleTheme: () => void;
+}
+
+export function TimetableHeader({
+  currentWeek,
+  availableWeeks,
+  onWeekChange,
+  searchQuery,
+  onSearchChange,
+  isDark,
+  onToggleTheme,
+}: TimetableHeaderProps) {
+  const { colorSchema } = useCampusData();
+  const isTeal = colorSchema === "teal";
+
+  return (
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-[#e5e7eb] dark:border-[#4b5563]">
+      <div className="flex flex-wrap items-baseline gap-1.5 select-none">
+        <h2 className="font-sans text-[15px] font-bold uppercase tracking-wider text-[#1f2937] dark:text-white">
+          TIMETABLE PREVIEW
+        </h2>
+        <span className="text-sm text-[#1f2937] dark:text-[#d1d5db] font-normal">
+          – Week of {currentWeek}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3 self-end md:self-auto relative">
+        {/* Toggle button to switch theme */}
+        <button
+          onClick={onToggleTheme}
+          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          className="flex items-center justify-center h-9 w-9 rounded-lg border border-[#e5e7eb] bg-white text-[#1f2937] hover:bg-gray-50 dark:border-[#4b5563] dark:bg-[#111827] dark:text-[#d1d5db] dark:hover:text-white transition cursor-pointer select-none"
+        >
+          {isDark ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
+        </button>
+
+        {/* Search input */}
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6b7280]" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className={cn(
+              "h-9 w-40 md:w-44 rounded-lg border border-[#e5e7eb] bg-white text-[#1f2937] placeholder-[#6b7280] dark:border-[#4b5563] dark:bg-[#111827] dark:text-white dark:placeholder-[#d1d5db] pl-9 pr-3.5 text-xs outline-none transition-all focus:ring-1",
+              isTeal
+                ? "focus:border-[#3c6e71] focus:ring-[#3c6e71]/25 dark:focus:border-[#3c6e71] dark:focus:ring-[#3c6e71]/30"
+                : "focus:border-[#534AB7] focus:ring-[#534AB7]/25 dark:focus:border-[#534AB7] dark:focus:ring-[#534AB7]/30"
+            )}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Subcomponent: TimetableLegend
+export function TimetableLegend() {
+  return (
+    <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 py-4 border-b border-[#e5e7eb] dark:border-[#4b5563]">
+      <div className="flex items-center gap-2 select-none">
+        <span className="h-3 w-4 rounded border border-[#c4b5fd] bg-[#ede9fe]" />
+        <span className="text-[11px] font-semibold text-[#6b7280] dark:text-[#d1d5db]">Theory</span>
+      </div>
+      <div className="flex items-center gap-2 select-none">
+        <span className="h-3 w-4 rounded border border-[#6ee7b7] bg-[#d1fae5]" />
+        <span className="text-[11px] font-semibold text-[#6b7280] dark:text-[#d1d5db]">Lab</span>
+      </div>
+      <div className="flex items-center gap-2 select-none">
+        <span className="h-3 w-4 rounded border border-[#fda4af] bg-[#ffe4e6]" />
+        <span className="text-[11px] font-semibold text-[#6b7280] dark:text-[#d1d5db]">Elective Lectures</span>
+      </div>
+    </div>
+  );
+}
+
+// Subcomponent: EventCard
+interface EventCardProps {
+  event: TimetableEvent;
+  matchesSearch: boolean;
+  onClick?: () => void;
+}
+
+export function EventCard({ event, matchesSearch, onClick }: EventCardProps) {
+  const classes = getCategoryClasses(event);
+  const startMins = timeToMinutes(event.startTime);
+  const endMins = timeToMinutes(event.endTime);
+
+  // Total grid span is 4 hours = 240 mins (from 08:00 to 12:00)
+  const topPercent = (startMins / 240) * 100;
+  const heightPercent = ((endMins - startMins) / 240) * 100;
+
+  const hasExtraInfo = event.professor || event.room;
+
+  return (
+    <div
+      onClick={onClick}
+      className={cn(
+        "absolute rounded-[10px] py-[8px] px-[10px] flex flex-col justify-center transition-all duration-300 text-left select-none cursor-pointer shadow-none",
+        classes.card,
+        matchesSearch
+          ? "opacity-100"
+          : "opacity-20 blur-[0.5px] scale-[0.98] pointer-events-none"
+      )}
+      style={{
+        top: `${topPercent}%`,
+        height: `${heightPercent}%`,
+        left: "5px",
+        right: "5px",
+      }}
+    >
+      <div className="font-medium text-[12px] leading-tight line-clamp-2">
+        {event.courseCode
+          ? `${event.courseCode} – ${event.courseName}`
+          : event.courseName}
+      </div>
+      {hasExtraInfo && (
+        <div className={cn("text-[11px] mt-0.5 truncate leading-none font-normal opacity-85", classes.sub)}>
+          {event.professor && event.room
+            ? `${event.professor} · ${event.room}`
+            : event.professor || event.room}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Subcomponent: TimetableGrid
+interface TimetableGridProps {
+  events: TimetableEvent[];
+  searchQuery: string;
+  onEventClick: (event: TimetableEvent) => void;
+}
+
+export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGridProps) {
+  // Check if an event matches the search query
+  const checkEventMatches = (event: TimetableEvent) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    const matchesCode = event.courseCode?.toLowerCase().includes(query) || false;
+    const matchesName = event.courseName.toLowerCase().includes(query);
+    const matchesProf = event.professor?.toLowerCase().includes(query) || false;
+    return matchesCode || matchesName || matchesProf;
+  };
+
+  return (
+    <div className="overflow-x-auto -mx-6 px-6 sm:-mx-8 sm:px-8 mt-5">
+      <div className="min-w-[850px] select-none">
+        
+        {/* Day Column Headers */}
+        <div className="grid grid-cols-[64px_repeat(6,1fr)] items-center border-b border-[#e5e7eb] dark:border-[#4b5563] pb-3">
+          {/* Gutter space */}
+          <div />
+          {daysOfWeek.map((day) => (
+            <div
+              key={day}
+              className="text-center font-medium text-[13px] text-[#6b7280] dark:text-[#d1d5db]"
+            >
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Grid Body */}
+        <div className="grid grid-cols-[64px_repeat(6,1fr)] relative h-[360px] mt-2.5">
+          {/* Horizontal Hour Lines (absolute background) */}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="absolute left-[64px] right-0 border-t-[0.5px] border-[#e5e7eb] dark:border-[#4b5563]/40 z-0"
+              style={{ top: `${i * 25}%` }}
+            />
+          ))}
+
+          {/* Time Labels (Gutter) */}
+          <div className="relative h-full z-10">
+            {timeLabels.map((label, idx) => (
+              <div
+                key={label}
+                className="absolute right-4 text-[12px] font-normal text-[#9ca3af] dark:text-[#d1d5db] select-none -translate-y-1/2 whitespace-nowrap"
+                style={{ top: `${idx * 25}%` }}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+
+          {/* Day Columns */}
+          {daysOfWeek.map((day) => {
+            const dayEvents = events.filter((e) => e.day === day);
+            return (
+              <div
+                key={day}
+                className="relative h-full z-10"
+              >
+                {dayEvents.map((event, eventIdx) => (
+                  <EventCard
+                    key={`${event.day}-${eventIdx}-${event.startTime}`}
+                    event={event}
+                    matchesSearch={checkEventMatches(event)}
+                    onClick={() => onEventClick(event)}
+                  />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// Parent component: TimetablePreview
+export function TimetablePreview() {
+  const { colorSchema } = useCampusData();
+  const isTeal = colorSchema === "teal";
+  const availableWeeks = Object.keys(weeksEventData);
+  const [currentWeek, setCurrentWeek] = useState(availableWeeks[0]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState<TimetableEvent | null>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  // Sync state with HTML's class list
+  useEffect(() => {
+    const checkDark = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+
+    checkDark();
+
+    // Listen to documentElement class changes
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const toggleTheme = () => {
+    const root = document.documentElement;
+    if (root.classList.contains("dark")) {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+  };
+
+  const events = weeksEventData[currentWeek] || [];
+
+  return (
+    <div className="w-full max-w-[1000px] bg-white border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:bg-[#374151] dark:border-[#4b5563] dark:shadow-none rounded-2xl p-6 sm:p-8 animate-in fade-in duration-300 transition-all">
+      <TimetableHeader
+        currentWeek={currentWeek}
+        availableWeeks={availableWeeks}
+        onWeekChange={setCurrentWeek}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        isDark={isDark}
+        onToggleTheme={toggleTheme}
+      />
+      <TimetableLegend />
+      <TimetableGrid
+        events={events}
+        searchQuery={searchQuery}
+        onEventClick={(event) => setSelectedEvent(event)}
+      />
+
+      {/* Detail Modal if clicked */}
+      {selectedEvent && (
+        <div
+          onClick={() => setSelectedEvent(null)}
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-white border border-gray-100 text-gray-900 dark:bg-[#374151] dark:border-[#4b5563] dark:text-white rounded-2xl shadow-xl p-5 select-none animate-in zoom-in-95 duration-200"
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <span
+                className={cn(
+                  "h-3 w-3 rounded-full",
+                  getCategoryClasses(selectedEvent).dot
+                )}
+              />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-[#d1d5db]">
+                {selectedEvent.category} lecture
+              </span>
+            </div>
+            
+            <h3 className="text-sm font-bold leading-snug">
+              {selectedEvent.courseCode
+                ? `${selectedEvent.courseCode} — ${selectedEvent.courseName}`
+                : selectedEvent.courseName}
+            </h3>
+
+            <div className="mt-4 space-y-2.5 border-t border-gray-50 dark:border-[#4b5563] pt-3">
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-400 dark:text-[#d1d5db]">Time:</span>
+                <span className="font-semibold text-gray-700 dark:text-white">
+                  {selectedEvent.day}, {selectedEvent.startTime} – {selectedEvent.endTime}
+                </span>
+              </div>
+              {selectedEvent.professor && (
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-400 dark:text-[#d1d5db]">Professor:</span>
+                  <span className="font-semibold text-gray-700 dark:text-white">{selectedEvent.professor}</span>
+                </div>
+              )}
+              {selectedEvent.room && (
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-400 dark:text-[#d1d5db]">Room/Lab:</span>
+                  <span className="font-semibold text-gray-700 dark:text-white">{selectedEvent.room}</span>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => setSelectedEvent(null)}
+              className={cn(
+                "mt-5 w-full bg-gray-50 border border-gray-200 hover:bg-gray-100 text-gray-700 dark:text-white dark:border-0 text-xs font-semibold py-2 rounded-xl transition cursor-pointer",
+                isTeal ? "dark:bg-[#3c6e71] dark:hover:bg-[#2e5557]" : "dark:bg-[#534AB7] dark:hover:bg-[#3C3489]"
+              )}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
