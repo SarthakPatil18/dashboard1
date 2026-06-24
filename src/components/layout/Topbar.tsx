@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, Search, Bell, Plus, Sun, Moon, Palette, CircleAlert, AlertTriangle, Building2, ScrollText, Trash2, X } from "lucide-react";
+import { Menu, Search, Bell, Plus, Sun, Moon, CircleAlert, AlertTriangle, Building2, ScrollText, Trash2, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useCampusData } from "@/hooks/useCampusData";
@@ -45,10 +45,6 @@ export function Topbar({ onMenu, title, subtitle }: { onMenu: () => void; title:
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
-
-  const toggleColorSchema = () => {
-    setColorSchema(isTeal ? "indigo" : "teal");
   };
 
   return (
@@ -99,19 +95,7 @@ export function Topbar({ onMenu, title, subtitle }: { onMenu: () => void; title:
           />
         </div>
 
-        {/* Color Schema Toggle Button */}
-        <button
-          onClick={toggleColorSchema}
-          title={isTeal ? "Switch to Indigo Color Scheme" : "Switch to Teal Color Scheme"}
-          className={cn(
-            "grid h-9 w-9 shrink-0 place-items-center rounded-lg transition cursor-pointer",
-            isTeal
-              ? "text-[#1f2937] hover:bg-gray-100 dark:text-sky-100 dark:hover:bg-[#1e3a4c]/60"
-              : "text-sky-100 hover:bg-[#1e3a4c]/60 hover:text-white"
-          )}
-        >
-          <Palette className={cn("h-[18px] w-[18px]", isTeal ? "text-[#3c6e71] dark:text-[#80cbc4]" : "text-[#CECBF6]")} />
-        </button>
+
 
         {/* Theme Toggle Button */}
         <button
