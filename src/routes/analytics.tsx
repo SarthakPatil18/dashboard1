@@ -38,7 +38,7 @@ export const Route = createFileRoute("/analytics")({
 });
 
 function AnalyticsPage() {
-  const { rooms, timetables, checkConflicts } = useCampusData();
+  const { rooms, timetables, checkConflicts, faculty } = useCampusData();
   const [selectedRoomState, setSelectedRoom] = useState("");
   const activeRoomId = selectedRoomState || rooms[0]?.id || "";
 
@@ -178,7 +178,7 @@ function AnalyticsPage() {
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <SectionCard title="Faculty Workload" subtitle="Balance across staff" icon={<Users className="h-4 w-4 text-primary" />}>
+        <SectionCard title="Faculty Workload" subtitle={`Balance across staff (showing top 8 of ${faculty.length} faculty)`} icon={<Users className="h-4 w-4 text-primary" />}>
           <FacultyWorkloadChart />
         </SectionCard>
         <SectionCard title="Weekly Room Utilization" subtitle="Occupancy rate" icon={<DoorOpen className="h-4 w-4 text-info" />}>

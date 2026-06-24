@@ -89,23 +89,21 @@ export function Topbar({ onMenu, title, subtitle }: { onMenu: () => void; title:
             className={cn(
               "h-9 w-56 rounded-lg pl-9 pr-3 text-sm outline-none transition focus:ring-1",
               isTeal
-                ? "border border-[#e5e7eb] bg-white dark:border-[#2d4e63] dark:bg-[#1a3344] focus:border-[#3c6e71] focus:ring-[#3c6e71]/25 text-[#1f2937] dark:text-white placeholder-[#6b7280] dark:placeholder-sky-200/40"
-                : "border border-[#2d4e63] bg-[#1a3344] focus:border-sky-400 focus:ring-sky-400/25 text-white placeholder-sky-200/40"
+                ? "border border-[#e5e7eb] bg-white dark:border-[#475569] dark:bg-[#0f1419] focus:border-[#3c6e71] dark:focus:border-[#3caea3] focus:ring-[#3c6e71]/25 text-[#1f2937] dark:text-white placeholder-[#6b7280] dark:placeholder-sky-200/40"
+                : "border border-[#475569] bg-[#0f1419] focus:border-sky-400 focus:ring-sky-400/25 text-white placeholder-sky-200/40"
             )}
           />
         </div>
-
-
 
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
           title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
           className={cn(
-            "grid h-9 w-9 shrink-0 place-items-center rounded-lg transition cursor-pointer",
+            "grid h-9 w-9 shrink-0 place-items-center rounded-lg transition cursor-pointer border border-transparent",
             isTeal
-              ? "text-[#1f2937] hover:bg-gray-100 dark:text-sky-100 dark:hover:bg-[#1e3a4c]/60"
-              : "text-sky-100 hover:bg-[#1e3a4c]/60 hover:text-white"
+              ? "text-[#1f2937] hover:bg-gray-100 dark:bg-[#1e293b] dark:border-[#475569] dark:text-sky-100 dark:hover:bg-[#334155]"
+              : "bg-[#1e293b] border-[#475569] text-sky-100 hover:bg-[#334155]"
           )}
         >
           {theme === "light" ? (
@@ -118,16 +116,16 @@ export function Topbar({ onMenu, title, subtitle }: { onMenu: () => void; title:
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(
-              "relative grid h-9 w-9 shrink-0 place-items-center rounded-lg transition cursor-pointer outline-none",
+              "relative grid h-9 w-9 shrink-0 place-items-center rounded-lg transition cursor-pointer outline-none border border-transparent",
               isTeal
-                ? "text-[#1f2937] hover:bg-gray-100 dark:text-sky-100 dark:hover:bg-[#1e3a4c]/60"
-                : "text-sky-100 hover:bg-[#1e3a4c]/60 hover:text-white"
+                ? "text-[#1f2937] hover:bg-gray-100 dark:bg-[#1e293b] dark:border-[#475569] dark:text-sky-100 dark:hover:bg-[#334155]"
+                : "bg-[#1e293b] border-[#475569] text-sky-100 hover:bg-[#334155]"
             )}>
               <Bell className="h-[18px] w-[18px]" />
               {notifications.length > 0 && (
                 <span className={cn(
                   "absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive ring-2",
-                  isTeal ? "ring-white dark:ring-[#1e3a4c]" : "ring-[#1e3a4c]"
+                  isTeal ? "ring-white dark:ring-[#1e293b]" : "ring-[#1e293b]"
                 )} />
               )}
             </button>
@@ -191,10 +189,10 @@ export function Topbar({ onMenu, title, subtitle }: { onMenu: () => void; title:
         </Button>
 
         <div className={cn(
-          "grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold select-none",
+          "grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold select-none border",
           isTeal
-            ? "bg-gray-100 border border-[#e5e7eb] dark:bg-[#1a3344] dark:border-[#2d4e63] text-[#1f2937] dark:text-sky-100"
-            : "bg-[#1a3344] border border-[#2d4e63] text-sky-100"
+            ? "bg-gray-100 border-[#e5e7eb] text-[#1f2937] dark:bg-[#1e293b] dark:border-[#475569] dark:text-sky-100"
+            : "bg-[#1e293b] border-[#475569] text-sky-100"
         )}>
           AD
         </div>

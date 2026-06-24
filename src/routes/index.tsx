@@ -122,7 +122,7 @@ function Dashboard() {
       <div className="mt-6">
         <SectionCard
           title="Faculty Workload Distribution"
-          subtitle="Assigned vs ideal weekly hours"
+          subtitle={`Assigned vs ideal weekly hours (showing top 8 of ${faculty.length} faculty)`}
           icon={<Users className="h-4 w-4 text-primary" />}
         >
           <FacultyWorkloadChart />

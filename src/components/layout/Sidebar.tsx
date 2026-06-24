@@ -102,21 +102,21 @@ export function Sidebar({ open, onClose }: { open: boolean; onClose: () => void 
                         "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                         active
                           ? isTeal
-                            ? "bg-[#e8f4f4] text-[#3c6e71] dark:bg-sidebar-accent dark:text-sidebar-accent-foreground"
-                            : "bg-[#EEEDFE] text-[#534AB7] dark:bg-sidebar-accent dark:text-sidebar-accent-foreground"
+                            ? "bg-[#e8f4f4] text-[#3c6e71] dark:bg-[#163638] dark:text-[#a7f3d0]"
+                            : "bg-[#EEEDFE] text-[#534AB7] dark:bg-[#342a96] dark:text-[#e0e7ff]"
                           : "text-[#1f2937] hover:bg-gray-100/50 hover:text-foreground dark:text-sidebar-muted dark:hover:bg-sidebar-accent/60 dark:hover:text-sidebar-foreground",
                       )}
                     >
                       {active && (
                         <span className={cn(
                           "absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full",
-                          isTeal ? "bg-[#3c6e71] dark:bg-sidebar-primary" : "bg-[#534AB7] dark:bg-sidebar-primary"
+                          isTeal ? "bg-[#3c6e71] dark:bg-[#3caea3]" : "bg-[#534AB7] dark:bg-primary"
                         )} />
                       )}
                       <item.icon className={cn(
                         "h-[18px] w-[18px] shrink-0", 
                         active 
-                          ? isTeal ? "text-[#3c6e71] dark:text-sidebar-primary" : "text-[#534AB7] dark:text-sidebar-primary"
+                          ? isTeal ? "text-[#3c6e71] dark:text-[#a7f3d0]" : "text-[#534AB7] dark:text-[#c7d2fe]"
                           : isTeal ? "text-[#1f2937] dark:text-sidebar-muted group-hover:text-[#3c6e71] dark:group-hover:text-white" : "text-[#1f2937] dark:text-sidebar-muted group-hover:text-[#534AB7] dark:group-hover:text-white"
                       )} />
                       <span className="truncate">{item.label}</span>

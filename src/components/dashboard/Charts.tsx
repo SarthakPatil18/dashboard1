@@ -59,9 +59,9 @@ export function FacultyWorkloadChart() {
         <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
         <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
         <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "#f9fafb" }} />
-        <Legend verticalAlign="bottom" height={36} iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11, color: "#9ca3af", paddingTop: 10 }} />
-        <Bar dataKey="ideal" fill="var(--chart-2)" radius={[6, 6, 0, 0]} name="Ideal" />
-        <Bar dataKey="load" fill="var(--chart-1)" radius={[6, 6, 0, 0]} name="Assigned" />
+        <Legend verticalAlign="top" align="right" height={36} iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11, color: "#9ca3af", paddingBottom: 15 }} />
+        <Bar dataKey="ideal" fill="#a3e2d9" radius={[6, 6, 0, 0]} name="Ideal" />
+        <Bar dataKey="load" fill="#1e6b65" radius={[6, 6, 0, 0]} name="Assigned" />
       </BarChart>
     </ResponsiveContainer>
   );
