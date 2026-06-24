@@ -92,6 +92,35 @@ function RoomsPage() {
     setIsOpen(false);
   };
 
+  // Sorting states
+  const [sortField, setSortField] = useState<keyof Row>("id");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const handleSort = (field: keyof Row) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  const renderHeader = (field: keyof Row, label: string) => {
+    const isSorted = sortField === field;
+    return (
+      <button
+        type="button"
+        onClick={() => handleSort(field)}
+        className="flex items-center gap-1 hover:text-foreground font-semibold uppercase tracking-wide cursor-pointer transition select-none text-left"
+      >
+        {label}
+        <span className="text-[10px] opacity-70">
+          {isSorted ? (sortDirection === "asc" ? "▲" : "▼") : "⇅"}
+        </span>
+      </button>
+    );
+  };
+
   // Filter rooms based on query
   const filteredRooms = rooms.filter(
     (r) =>
@@ -100,12 +129,29 @@ function RoomsPage() {
       r.building.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Sort rooms
+  const sortedRooms = [...filteredRooms].sort((a, b) => {
+    const aVal = a[sortField];
+    const bVal = b[sortField];
+
+    if (typeof aVal === "number" && typeof bVal === "number") {
+      return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
+    }
+
+    const aStr = String(aVal).toLowerCase();
+    const bStr = String(bVal).toLowerCase();
+
+    if (aStr < bStr) return sortDirection === "asc" ? -1 : 1;
+    if (aStr > bStr) return sortDirection === "asc" ? 1 : -1;
+    return 0;
+  });
+
   const columns: Column<Row>[] = [
-    { key: "id", header: "Room", render: (r) => <span className="font-semibold">{r.id}</span> },
-    { key: "type", header: "Type" },
-    { key: "building", header: "Building" },
-    { key: "capacity", header: "Capacity", render: (r) => `${r.capacity} seats` },
-    { key: "utilization", header: "Utilization", render: (r) => (
+    { key: "id", header: renderHeader("id", "Room"), render: (r) => <span className="font-semibold">{r.id}</span> },
+    { key: "type", header: renderHeader("type", "Type") },
+    { key: "building", header: renderHeader("building", "Building") },
+    { key: "capacity", header: renderHeader("capacity", "Capacity"), render: (r) => `${r.capacity} seats` },
+    { key: "utilization", header: renderHeader("utilization", "Utilization"), render: (r) => (
       <div className="flex items-center gap-2">
         <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-100">
           <div className="h-full rounded-full bg-[#534AB7]" style={{ width: `${r.utilization}%` }} />
@@ -113,7 +159,7 @@ function RoomsPage() {
         <span className="text-xs font-medium">{r.utilization}%</span>
       </div>
     )},
-    { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
+    { key: "status", header: renderHeader("status", "Status"), render: (r) => <StatusBadge status={r.status} /> },
     {
       key: "actions",
       header: "Actions",
@@ -166,7 +212,7 @@ function RoomsPage() {
             className="h-9 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
           />
         </div>
-        <DataTable columns={columns} data={filteredRooms} />
+        <DataTable columns={columns} data={sortedRooms} />
       </SectionCard>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
