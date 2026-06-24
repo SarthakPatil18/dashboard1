@@ -805,8 +805,8 @@ export function CampusDataProvider({ children }: { children: React.ReactNode }) 
       const solverLogNotif: Notification = {
         id: String(Date.now()),
         category: "log",
-        title: "AI Solvers generated successfully",
-        detail: `CP-SAT solver compiled optimized timetable with run ID: ${result.run_id}`,
+        title: "AI Timetable generated successfully",
+        detail: `CP-SAT solver compiled optimized schedule with run ID: ${result.run_id}`,
         time: "Just now",
       };
       setNotifications((prev) => [solverLogNotif, ...prev]);
