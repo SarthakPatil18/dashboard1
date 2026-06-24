@@ -155,7 +155,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
       <div className="overflow-x-auto">
         <div className="min-w-[800px] border border-[#e5e7eb] rounded-xl overflow-hidden bg-white">
           {/* Grid Headers */}
-          <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b border-[#e5e7eb] pb-2.5 pt-2.5 items-center">
+          <div className="grid grid-cols-[60px_repeat(6,minmax(0,1fr))] border-b border-[#e5e7eb] pb-2.5 pt-2.5 items-center">
             <div />
             {days.map((day) => (
               <div key={day} className="text-center text-[12px] font-medium text-[#6b7280] dark:text-muted-foreground">
@@ -174,7 +174,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
             const periodRow = (
               <div
                 key={period}
-                className="grid grid-cols-[60px_repeat(6,1fr)] border-b-[0.5px] border-[#e5e7eb] last:border-b-0 min-h-[74px] items-stretch"
+                className="grid grid-cols-[60px_repeat(6,minmax(0,1fr))] border-b-[0.5px] border-[#e5e7eb] last:border-b-0 min-h-[74px] items-stretch"
               >
                 {/* Time Label */}
                 <div className="text-[10px] text-[#9ca3af] font-normal text-right pr-2.5 pt-2 select-none whitespace-nowrap leading-tight">
@@ -189,7 +189,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                   return (
                     <div
                       key={day}
-                      className="p-1.5 bg-white flex flex-col justify-start items-stretch min-h-[66px]"
+                      className="p-1.5 bg-white flex flex-col justify-start items-stretch min-h-[66px] min-w-0 overflow-hidden"
                     >
                       {slot ? (
                         <div
@@ -225,7 +225,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
               return (
                 <div key={`group-${period}`} className="contents">
                   {periodRow}
-                  <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b-[0.5px] border-[#e5e7eb] items-center bg-gray-50/20">
+                  <div className="grid grid-cols-[60px_repeat(6,minmax(0,1fr))] border-b-[0.5px] border-[#e5e7eb] items-center bg-gray-50/20">
                     <div className="text-[11px] text-[#9ca3af] font-normal text-right pr-2.5 select-none py-1">
                       12 PM
                     </div>
@@ -305,7 +305,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
         <div className="min-w-[900px] border border-[#e5e7eb] rounded-xl overflow-hidden bg-white">
           
           {/* Day Headers (Mon-Sat) */}
-          <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b border-[#e5e7eb] pb-3 pt-3 items-center">
+          <div className="grid grid-cols-[60px_repeat(6,minmax(0,1fr))] border-b border-[#e5e7eb] pb-3 pt-3 items-center">
             <div />
             {days.map((day) => (
               <div key={day} className="text-center text-[13px] font-medium text-[#6b7280]">
@@ -324,7 +324,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
             const periodRow = (
               <div
                 key={period}
-                className="grid grid-cols-[60px_repeat(6,1fr)] border-b-[0.5px] border-[#e5e7eb] last:border-b-0 min-h-[90px] items-stretch"
+                className="grid grid-cols-[60px_repeat(6,minmax(0,1fr))] border-b-[0.5px] border-[#e5e7eb] last:border-b-0 min-h-[90px] items-stretch"
               >
                 {/* Time Label (08:30-09:25...) */}
                 <div className="text-[11px] text-[#9ca3af] font-normal text-right pr-3 pt-3.5 select-none whitespace-nowrap leading-tight">
@@ -350,7 +350,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                       key={day}
                       onClick={() => handleCellClick(day, periodIdx)}
                       className={cn(
-                        "p-2 bg-white flex flex-col justify-start items-stretch min-h-[82px] transition-colors",
+                        "p-2 bg-white flex flex-col justify-start items-stretch min-h-[82px] min-w-0 overflow-hidden transition-colors",
                         editMode ? "cursor-pointer hover:bg-gray-50/50" : ""
                       )}
                     >
@@ -398,7 +398,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
               return (
                 <div key={`group-${period}`} className="contents">
                   {periodRow}
-                  <div className="grid grid-cols-[60px_repeat(6,1fr)] border-b-[0.5px] border-[#e5e7eb] items-center bg-gray-50/20">
+                  <div className="grid grid-cols-[60px_repeat(6,minmax(0,1fr))] border-b-[0.5px] border-[#e5e7eb] items-center bg-gray-50/20">
                     <div className="text-[12px] text-[#9ca3af] font-normal text-right pr-3 select-none py-2">
                       12 PM
                     </div>
