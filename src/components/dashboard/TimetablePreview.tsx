@@ -331,81 +331,121 @@ const daysOfWeek = [
 
 const timeLabels = ["8 AM", "10 AM", "12 PM", "2 PM", "4 PM", "6 PM", "7 PM"];
 
-// Category styles mapping based on the 8 course-differentiating colors
+const colorPalettes = [
+  // 1. Violet
+  {
+    card: "bg-[#ede9fe] border border-[#c4b5fd] text-[#5b21b6] hover:bg-[#ddd6fe] hover:border-[#a78bfa] dark:bg-[#ede9fe]/15 dark:border-[#c4b5fd]/40 dark:text-[#c4b5fd]",
+    dot: "bg-[#7c3aed]",
+    tag: "bg-[#7c3aed] text-white",
+    sub: "text-[#5b21b6]/85 dark:text-[#d1d5db]",
+  },
+  // 2. Emerald
+  {
+    card: "bg-[#d1fae5] border border-[#6ee7b7] text-[#064e3b] hover:bg-[#a7f3d0] hover:border-[#34d399] dark:bg-[#d1fae5]/15 dark:border-[#6ee7b7]/40 dark:text-[#6ee7b7]",
+    dot: "bg-[#059669]",
+    tag: "bg-[#059669] text-white",
+    sub: "text-[#064e3b]/80 dark:text-[#d1d5db]",
+  },
+  // 3. Amber
+  {
+    card: "bg-[#fef3c7] border border-[#fcd34d] text-[#78350f] hover:bg-[#fde68a] hover:border-[#fbbf24] dark:bg-[#fef3c7]/15 dark:border-[#fcd34d]/40 dark:text-[#fcd34d]",
+    dot: "bg-[#d97706]",
+    tag: "bg-[#d97706] text-white",
+    sub: "text-[#78350f]/80 dark:text-[#d1d5db]",
+  },
+  // 4. Orange
+  {
+    card: "bg-[#ffedd5] border border-[#fdba74] text-[#7c2d12] hover:bg-[#fed7aa] hover:border-[#f97316] dark:bg-[#ffedd5]/15 dark:border-[#fdba74]/40 dark:text-[#fdba74]",
+    dot: "bg-[#ea580c]",
+    tag: "bg-[#ea580c] text-white",
+    sub: "text-[#7c2d12]/80 dark:text-[#d1d5db]",
+  },
+  // 5. Teal
+  {
+    card: "bg-[#ccfbf1] border border-[#5eead4] text-[#134e4a] hover:bg-[#99f6e4] hover:border-[#14b8a6] dark:bg-[#ccfbf1]/15 dark:border-[#5eead4]/40 dark:text-[#5eead4]",
+    dot: "bg-[#0d9488]",
+    tag: "bg-[#0d9488] text-white",
+    sub: "text-[#134e4a]/85 dark:text-[#d1d5db]",
+  },
+  // 6. Rose
+  {
+    card: "bg-[#ffe4e6] border border-[#fda4af] text-[#881337] hover:bg-[#fecdd3] hover:border-[#f43f5e] dark:bg-[#ffe4e6]/15 dark:border-[#fda4af]/40 dark:text-[#fda4af]",
+    dot: "bg-[#e11d48]",
+    tag: "bg-[#e11d48] text-white",
+    sub: "text-[#881337]/80 dark:text-[#d1d5db]",
+  },
+  // 7. Cyan
+  {
+    card: "bg-[#cffafe] border border-[#67e8f9] text-[#164e63] hover:bg-[#a5f3fc] hover:border-[#22d3ee] dark:bg-[#cffafe]/15 dark:border-[#67e8f9]/40 dark:text-[#67e8f9]",
+    dot: "bg-[#0891b2]",
+    tag: "bg-[#0891b2] text-white",
+    sub: "text-[#164e63]/80 dark:text-[#d1d5db]",
+  },
+  // 8. Pink
+  {
+    card: "bg-[#fce7f3] border border-[#f9a8d4] text-[#831843] hover:bg-[#fbcfe8] hover:border-[#ec4899] dark:bg-[#fce7f3]/15 dark:border-[#f9a8d4]/40 dark:text-[#f9a8d4]",
+    dot: "bg-[#db2777]",
+    tag: "bg-[#db2777] text-white",
+    sub: "text-[#831843]/80 dark:text-[#d1d5db]",
+  },
+  // 9. Indigo
+  {
+    card: "bg-[#e0e7ff] border border-[#c7d2fe] text-[#3730a3] hover:bg-[#c7d2fe] hover:border-[#a5b4fc] dark:bg-[#e0e7ff]/15 dark:border-[#c7d2fe]/40 dark:text-[#c7d2fe]",
+    dot: "bg-[#4f46e5]",
+    tag: "bg-[#4f46e5] text-white",
+    sub: "text-[#3730a3]/85 dark:text-[#d1d5db]",
+  },
+  // 10. Blue
+  {
+    card: "bg-[#dbeafe] border border-[#bfdbfe] text-[#1e3a8a] hover:bg-[#bfdbfe] hover:border-[#93c5fd] dark:bg-[#dbeafe]/15 dark:border-[#bfdbfe]/40 dark:text-[#bfdbfe]",
+    dot: "bg-[#2563eb]",
+    tag: "bg-[#2563eb] text-white",
+    sub: "text-[#1e3a8a]/85 dark:text-[#d1d5db]",
+  }
+];
+
+// Category styles mapping based on the course-differentiating colors
 const getCategoryClasses = (event: TimetableEvent) => {
   const name = event.courseName.toLowerCase();
   const code = event.courseCode?.toLowerCase() || "";
 
   // 1. Amber (CSC401 - Data Structures)
   if (name.includes("data structures") || code.includes("csc401")) {
-    return {
-      card: "bg-[#fef3c7] border border-[#fcd34d] text-[#78350f] hover:bg-[#fde68a] hover:border-[#fbbf24] dark:bg-[#fef3c7]/15 dark:border-[#fcd34d]/40 dark:text-[#fcd34d]",
-      dot: "bg-[#d97706]",
-      tag: "bg-[#d97706] text-white",
-      sub: "text-[#78350f]/80 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[2];
   }
   // 2. Emerald (BIO201 - Cell Biology Lab)
   if (name.includes("cell biology") || code.includes("bio201")) {
-    return {
-      card: "bg-[#d1fae5] border border-[#6ee7b7] text-[#064e3b] hover:bg-[#a7f3d0] hover:border-[#34d399] dark:bg-[#d1fae5]/15 dark:border-[#6ee7b7]/40 dark:text-[#6ee7b7]",
-      dot: "bg-[#059669]",
-      tag: "bg-[#059669] text-white",
-      sub: "text-[#064e3b]/80 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[1];
   }
   // 3. Orange (HIS110 - World History)
   if (name.includes("world history") || code.includes("his110")) {
-    return {
-      card: "bg-[#ffedd5] border border-[#fdba74] text-[#7c2d12] hover:bg-[#fed7aa] hover:border-[#f97316] dark:bg-[#ffedd5]/15 dark:border-[#fdba74]/40 dark:text-[#fdba74]",
-      dot: "bg-[#ea580c]",
-      tag: "bg-[#ea580c] text-white",
-      sub: "text-[#7c2d12]/80 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[3];
   }
   // 4. Teal (ENG210 - Creative Writing)
   if (name.includes("creative writing") || code.includes("eng210")) {
-    return {
-      card: "bg-[#ccfbf1] border border-[#5eead4] text-[#134e4a] hover:bg-[#99f6e4] hover:border-[#14b8a6] dark:bg-[#ccfbf1]/15 dark:border-[#5eead4]/40 dark:text-[#5eead4]",
-      dot: "bg-[#0d9488]",
-      tag: "bg-[#0d9488] text-white",
-      sub: "text-[#134e4a]/85 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[4];
   }
   // 5. Rose (Theory - Lab Biology)
   if (name.includes("theory - lab biology")) {
-    return {
-      card: "bg-[#ffe4e6] border border-[#fda4af] text-[#881337] hover:bg-[#fecdd3] hover:border-[#f43f5e] dark:bg-[#ffe4e6]/15 dark:border-[#fda4af]/40 dark:text-[#fda4af]",
-      dot: "bg-[#e11d48]",
-      tag: "bg-[#e11d48] text-white",
-      sub: "text-[#881337]/80 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[5];
   }
   // 6. Cyan (Lab Lab Lecture)
   if (name.includes("lab lab lecture")) {
-    return {
-      card: "bg-[#cffafe] border border-[#67e8f9] text-[#164e63] hover:bg-[#a5f3fc] hover:border-[#22d3ee] dark:bg-[#cffafe]/15 dark:border-[#67e8f9]/40 dark:text-[#67e8f9]",
-      dot: "bg-[#0891b2]",
-      tag: "bg-[#0891b2] text-white",
-      sub: "text-[#164e63]/80 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[6];
   }
   // 7. Pink (Elective Lecture Lecture)
   if (name.includes("elective lecture lecture")) {
-    return {
-      card: "bg-[#fce7f3] border border-[#f9a8d4] text-[#831843] hover:bg-[#fbcfe8] hover:border-[#ec4899] dark:bg-[#fce7f3]/15 dark:border-[#f9a8d4]/40 dark:text-[#f9a8d4]",
-      dot: "bg-[#db2777]",
-      tag: "bg-[#db2777] text-white",
-      sub: "text-[#831843]/80 dark:text-[#d1d5db]",
-    };
+    return colorPalettes[7];
   }
-  // 8. Violet (Default/Theory Lab Lecture)
-  return {
-    card: "bg-[#ede9fe] border border-[#c4b5fd] text-[#5b21b6] hover:bg-[#ddd6fe] hover:border-[#a78bfa] dark:bg-[#ede9fe]/15 dark:border-[#c4b5fd]/40 dark:text-[#c4b5fd]",
-    dot: "bg-[#7c3aed]",
-    tag: "bg-[#7c3aed] text-white",
-    sub: "text-[#5b21b6]/85 dark:text-[#d1d5db]",
-  };
+
+  // Dynamic hashing for dynamic classes
+  let hash = 0;
+  const combined = (code + name).trim();
+  for (let i = 0; i < combined.length; i++) {
+    hash = combined.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colorPalettes.length;
+  return colorPalettes[index];
 };
 
 // Subcomponent: TimetableHeader
@@ -587,23 +627,49 @@ export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGr
         {/* Grid Body */}
         <div className="grid grid-cols-[64px_repeat(6,1fr)] relative h-[560px] mt-2.5">
           {/* Horizontal Hour Lines (absolute background) */}
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[
+            { label: "8 AM", top: 0 },
+            { label: "9 AM", top: (1 / 11) * 100 },
+            { label: "10 AM", top: (2 / 11) * 100 },
+            { label: "11 AM", top: (3 / 11) * 100 },
+            { label: "12 PM", top: (4 / 11) * 100 },
+            { label: "1 PM", top: (5 / 11) * 100 },
+            { label: "2 PM", top: (6 / 11) * 100 },
+            { label: "3 PM", top: (7 / 11) * 100 },
+            { label: "4 PM", top: (8 / 11) * 100 },
+            { label: "5 PM", top: (9 / 11) * 100 },
+            { label: "6 PM", top: (10 / 11) * 100 },
+            { label: "7 PM", top: 100 }
+          ].map((pos) => (
             <div
-              key={i}
+              key={pos.label}
               className="absolute left-[64px] right-0 border-t-[0.5px] border-[#e5e7eb] dark:border-[#4b5563]/40 z-0"
-              style={{ top: `${i * 25}%` }}
+              style={{ top: `${pos.top}%` }}
             />
           ))}
 
           {/* Time Labels (Gutter) */}
           <div className="relative h-full z-10">
-            {timeLabels.map((label, idx) => (
+            {[
+              { label: "8 AM", top: 0 },
+              { label: "9 AM", top: (1 / 11) * 100 },
+              { label: "10 AM", top: (2 / 11) * 100 },
+              { label: "11 AM", top: (3 / 11) * 100 },
+              { label: "12 PM", top: (4 / 11) * 100 },
+              { label: "1 PM", top: (5 / 11) * 100 },
+              { label: "2 PM", top: (6 / 11) * 100 },
+              { label: "3 PM", top: (7 / 11) * 100 },
+              { label: "4 PM", top: (8 / 11) * 100 },
+              { label: "5 PM", top: (9 / 11) * 100 },
+              { label: "6 PM", top: (10 / 11) * 100 },
+              { label: "7 PM", top: 100 }
+            ].map((pos) => (
               <div
-                key={label}
+                key={pos.label}
                 className="absolute right-4 text-[12px] font-normal text-[#9ca3af] dark:text-[#d1d5db] select-none -translate-y-1/2 whitespace-nowrap"
-                style={{ top: `${idx * 25}%` }}
+                style={{ top: `${pos.top}%` }}
               >
-                {label}
+                {pos.label}
               </div>
             ))}
           </div>
@@ -733,20 +799,46 @@ export function TimetablePreview() {
           const dayName = dayFullMap[day];
           if (!dayName) return;
           const slots = schedule[day] || [];
-          slots.forEach((slot, idx) => {
-            if (slot && idx < timeSlots.length) {
-              compiledEvents.push({
-                day: dayName as any,
-                startTime: timeSlots[idx].start,
-                endTime: timeSlots[idx].end,
-                courseCode: slot.subject.substring(0, 7).toUpperCase(),
-                courseName: slot.subject,
-                professor: slot.faculty,
-                room: slot.room,
-                category: slot.type === "lab" ? "lab" : slot.type === "elective" ? "elective" : "theory",
-              });
+          
+          let currentMerged: TimetableEvent | null = null;
+
+          for (let idx = 0; idx < slots.length; idx++) {
+            if (idx >= timeSlots.length) break;
+            const slot = slots[idx];
+
+            if (slot) {
+              if (currentMerged && 
+                  currentMerged.courseName === slot.subject &&
+                  currentMerged.professor === slot.faculty &&
+                  currentMerged.room === slot.room &&
+                  currentMerged.endTime === timeSlots[idx].start) {
+                currentMerged.endTime = timeSlots[idx].end;
+              } else {
+                if (currentMerged) {
+                  compiledEvents.push(currentMerged);
+                }
+                currentMerged = {
+                  day: dayName as any,
+                  startTime: timeSlots[idx].start,
+                  endTime: timeSlots[idx].end,
+                  courseCode: slot.subject.substring(0, 7).toUpperCase(),
+                  courseName: slot.subject,
+                  professor: slot.faculty,
+                  room: slot.room,
+                  category: slot.type === "lab" ? "lab" : slot.type === "elective" ? "elective" : "theory",
+                };
+              }
+            } else {
+              if (currentMerged) {
+                compiledEvents.push(currentMerged);
+                currentMerged = null;
+              }
             }
-          });
+          }
+
+          if (currentMerged) {
+            compiledEvents.push(currentMerged);
+          }
         });
       }
     } else {
@@ -754,6 +846,19 @@ export function TimetablePreview() {
       const activeGroups = Object.keys(timetables).filter(
         (gId) => gId !== "Timetable A" && gId !== "Timetable B" && gId !== "Timetable C"
       );
+
+      // Create a day-based slot grid for this faculty member
+      interface FacultySlot {
+        subject: string;
+        faculty: string;
+        room: string;
+        type: string;
+        cohort: string;
+      }
+      const facultyScheduleByDay: Record<string, (FacultySlot | null)[]> = {};
+      Object.values(dayFullMap).forEach((dayName) => {
+        facultyScheduleByDay[dayName] = Array(timeSlots.length).fill(null);
+      });
 
       activeGroups.forEach((gId) => {
         const schedule = timetables[gId];
@@ -764,19 +869,88 @@ export function TimetablePreview() {
           const slots = schedule[day] || [];
           slots.forEach((slot, idx) => {
             if (slot && slot.faculty === activeFaculty && idx < timeSlots.length) {
-              compiledEvents.push({
+              facultyScheduleByDay[dayName][idx] = {
+                subject: slot.subject,
+                faculty: slot.faculty,
+                room: slot.room,
+                type: slot.type,
+                cohort: gId,
+              };
+            }
+          });
+        });
+      });
+
+      Object.keys(facultyScheduleByDay).forEach((dayName) => {
+        const slots = facultyScheduleByDay[dayName];
+        interface MergedFacultyEvent extends TimetableEvent {
+          cohort: string;
+        }
+        let currentMerged: MergedFacultyEvent | null = null;
+
+        for (let idx = 0; idx < slots.length; idx++) {
+          const slot = slots[idx];
+          if (slot) {
+            if (currentMerged &&
+                currentMerged.courseName === slot.subject &&
+                currentMerged.room === slot.room &&
+                currentMerged.cohort === slot.cohort &&
+                currentMerged.endTime === timeSlots[idx].start) {
+              currentMerged.endTime = timeSlots[idx].end;
+            } else {
+              if (currentMerged) {
+                compiledEvents.push({
+                  day: currentMerged.day,
+                  startTime: currentMerged.startTime,
+                  endTime: currentMerged.endTime,
+                  courseCode: currentMerged.courseCode,
+                  courseName: `${currentMerged.courseName} (${currentMerged.cohort})`,
+                  professor: currentMerged.professor,
+                  room: currentMerged.room,
+                  category: currentMerged.category,
+                });
+              }
+              currentMerged = {
                 day: dayName as any,
                 startTime: timeSlots[idx].start,
                 endTime: timeSlots[idx].end,
                 courseCode: slot.subject.substring(0, 7).toUpperCase(),
-                courseName: `${slot.subject} (${gId})`,
+                courseName: slot.subject,
                 professor: slot.faculty,
                 room: slot.room,
                 category: slot.type === "lab" ? "lab" : slot.type === "elective" ? "elective" : "theory",
-              });
+                cohort: slot.cohort,
+              };
             }
+          } else {
+            if (currentMerged) {
+              compiledEvents.push({
+                day: currentMerged.day,
+                startTime: currentMerged.startTime,
+                endTime: currentMerged.endTime,
+                courseCode: currentMerged.courseCode,
+                courseName: `${currentMerged.courseName} (${currentMerged.cohort})`,
+                professor: currentMerged.professor,
+                room: currentMerged.room,
+                category: currentMerged.category,
+              });
+              currentMerged = null;
+            }
+          }
+        }
+
+        if (currentMerged) {
+          compiledEvents.push({
+            day: currentMerged.day,
+            startTime: currentMerged.startTime,
+            endTime: currentMerged.endTime,
+            courseCode: currentMerged.courseCode,
+            courseName: `${currentMerged.courseName} (${currentMerged.cohort})`,
+            professor: currentMerged.professor,
+            room: currentMerged.room,
+            category: currentMerged.category,
           });
-        });
+        }
       });
     }
 
