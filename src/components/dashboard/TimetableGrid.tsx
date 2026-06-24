@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, AlertTriangle, Sparkles, Search } from "lucide-react";
+import { Trash2, AlertTriangle, Sparkles, Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Convert 24h format in mock data to AM/PM labels exactly as per specification
 const timeLabels: Record<string, string> = {
@@ -195,11 +195,13 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                         <div
                           title={`${subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - ${slot.subject}\nFaculty: ${slot.faculty}\nRoom: ${slot.room}`}
                           className={cn(
-                            "rounded-[10px] p-2 flex flex-col justify-between h-full select-none text-left shadow-none",
+                            "rounded-[10px] flex flex-col justify-between h-full select-none text-left shadow-none",
                             getSlotStyleByType(slot.type).bg,
                             getSlotStyleByType(slot.type).border,
                             getSlotStyleByType(slot.type).text,
-                            hasConflicts && "border-l-2 border-l-destructive bg-destructive/5 text-destructive"
+                            hasConflicts 
+                              ? "border-l-2 border-l-destructive pl-[6px] pr-2 py-2 bg-destructive/5 text-destructive"
+                              : "p-2"
                           )}
                         >
                           <div className="min-w-0 flex items-center justify-between gap-1">
@@ -247,13 +249,25 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
     <div className="bg-white rounded-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-6">
       {/* Top Bar controls inside the card */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E8E8] pb-4">
-        <div className="flex flex-wrap items-baseline gap-2">
-          <h2 className="font-display text-[15px] font-bold uppercase tracking-wider text-[#1a1a1a]">
-            TIMETABLE PREVIEW
-          </h2>
-          <span className="text-sm font-normal text-[#666666]">
-            – Week of {week}, 2026
+        {/* Week navigation control */}
+        <div className="flex items-center gap-1.5 border border-[#e5e7eb] rounded-lg p-1 bg-gray-50/50">
+          <button
+            onClick={() => setWeek(week === "Nov 8–13" ? "Nov 1–6" : week === "Nov 15–20" ? "Nov 8–13" : "Nov 1–6")}
+            className="p-1 rounded hover:bg-gray-100 text-gray-600 transition h-7 w-7 flex items-center justify-center border-0 bg-transparent cursor-pointer"
+            title="Previous Week"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <span className="text-xs font-semibold text-gray-700 px-1 select-none">
+            Week of {week}
           </span>
+          <button
+            onClick={() => setWeek(week === "Nov 1–6" ? "Nov 8–13" : week === "Nov 8–13" ? "Nov 15–20" : "Nov 15–20")}
+            className="p-1 rounded hover:bg-gray-100 text-gray-600 transition h-7 w-7 flex items-center justify-center border-0 bg-transparent cursor-pointer"
+            title="Next Week"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
 
         <div className="flex items-center gap-2 self-end sm:self-auto">
@@ -344,23 +358,31 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                         <div
                           title={`${subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - ${slot.subject}\nFaculty: ${slot.faculty}\nRoom: ${slot.room}`}
                           className={cn(
-                            "rounded-[10px] py-[8px] px-[10px] flex flex-col justify-between h-full select-none text-left transition-transform duration-200 shadow-none",
+                            "rounded-[10px] py-[8px] flex flex-col justify-between h-full select-none text-left transition-transform duration-200 shadow-none",
                             getSlotStyleByType(slot.type).bg,
                             getSlotStyleByType(slot.type).border,
                             getSlotStyleByType(slot.type).text,
                             editMode && "hover:scale-[1.01]",
-                            hasConflicts && "border-l-4 border-l-destructive bg-destructive/5 text-destructive"
+                            hasConflicts 
+                              ? "border-l-4 border-l-destructive pl-[6px] pr-[10px] bg-destructive/5 text-destructive"
+                              : "pl-[9px] pr-[9px]"
                           )}
                         >
-                          <div className="min-w-0 flex items-start justify-between gap-1">
-                            <p className="text-[12px] font-medium leading-snug tracking-tight truncate w-full">
-                              {subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - {slot.subject}
+                          <div className="min-w-0 flex items-center justify-between gap-2 w-full">
+                            <p className="text-[12px] font-medium leading-snug tracking-tight truncate flex-1">
+                              {(() => {
+                                const code = subjects.find((s) => s.name === slot.subject)?.code || "SUBJ";
+                                const subjectName = slot.subject;
+                                return code.toLowerCase() === subjectName.toLowerCase()
+                                  ? subjectName
+                                  : `${code} - ${subjectName}`;
+                              })()}
                             </p>
                             {hasConflicts && (
-                              <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0 ml-1 mt-0.5" />
+                              <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />
                             )}
                           </div>
-                          <div className="mt-1.5 text-[11px] font-normal opacity-80 leading-none truncate">
+                          <div className="mt-1.5 text-[11px] font-normal opacity-80 leading-none truncate w-full">
                             ({slot.faculty}) - {slot.room}
                           </div>
                         </div>
