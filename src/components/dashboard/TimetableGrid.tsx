@@ -213,25 +213,25 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <button 
-                                    className="focus:outline-none p-0.5 rounded hover:bg-amber-500/10 transition-colors shrink-0 cursor-pointer"
+                                    className="focus:outline-none p-0.5 rounded hover:bg-red-500/10 transition-colors shrink-0 cursor-pointer"
                                     onClick={(e) => e.stopPropagation()}
                                   >
-                                    <AlertTriangle className="h-3 w-3 text-amber-500" />
+                                    <AlertTriangle className="h-3.5 w-3.5 text-red-500 fill-red-500/5" />
                                   </button>
                                 </PopoverTrigger>
                                 <PopoverContent 
-                                  className="z-50 w-64 rounded-xl border border-amber-500/20 bg-amber-50/95 p-3 text-xs text-amber-950 shadow-md outline-none"
+                                  className="z-50 w-64 rounded-xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-950 shadow-md outline-none"
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  <div className="space-y-1 font-sans">
-                                    <p className="font-semibold text-amber-800 flex items-center gap-1.5 border-b border-amber-500/10 pb-1 mb-1">
-                                      <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
+                                  <div className="space-y-1 font-sans text-left">
+                                    <p className="font-semibold text-red-800 flex items-center gap-1.5 border-b border-red-200/60 pb-1 mb-1">
+                                      <AlertTriangle className="h-4 w-4 text-red-600" />
                                       Scheduling Conflict
                                     </p>
                                     {cellConflicts.map((c, idx) => (
                                       <div key={idx} className="flex items-start gap-1">
-                                        <span className="text-amber-600 mt-0.5">•</span>
-                                        <span>{c.message}</span>
+                                        <span className="text-red-500 mt-0.5">•</span>
+                                        <span className="leading-tight">{c.message}</span>
                                       </div>
                                     ))}
                                   </div>
@@ -399,25 +399,25 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <button 
-                                    className="focus:outline-none p-0.5 rounded hover:bg-amber-500/10 transition-colors shrink-0 cursor-pointer"
+                                    className="focus:outline-none p-0.5 rounded hover:bg-red-500/10 transition-colors shrink-0 cursor-pointer"
                                     onClick={(e) => e.stopPropagation()}
                                   >
-                                    <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
+                                    <AlertTriangle className="h-3.5 w-3.5 text-red-500 fill-red-500/5" />
                                   </button>
                                 </PopoverTrigger>
                                 <PopoverContent 
-                                  className="z-50 w-72 rounded-xl border border-amber-500/20 bg-amber-50/95 p-3 text-xs text-amber-950 shadow-md outline-none"
+                                  className="z-50 w-72 rounded-xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-950 shadow-md outline-none"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   <div className="space-y-1 font-sans text-left">
-                                    <p className="font-semibold text-amber-800 flex items-center gap-1.5 border-b border-amber-500/10 pb-1 mb-1">
-                                      <AlertTriangle className="h-4 w-4 text-amber-600" />
+                                    <p className="font-semibold text-red-800 flex items-center gap-1.5 border-b border-red-200/60 pb-1 mb-1">
+                                      <AlertTriangle className="h-4 w-4 text-red-600" />
                                       Scheduling Conflict
                                     </p>
                                     {cellConflicts.map((c, idx) => (
                                       <div key={idx} className="flex items-start gap-1">
-                                        <span className="text-amber-600 mt-0.5">•</span>
-                                        <span>{c.message}</span>
+                                        <span className="text-red-500 mt-0.5">•</span>
+                                        <span className="leading-tight">{c.message}</span>
                                       </div>
                                     ))}
                                   </div>

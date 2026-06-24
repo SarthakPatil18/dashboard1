@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, Search, Sparkles, Sun, Moon } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Search, Sparkles, Sun, Moon, CalendarCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useCampusData } from "@/hooks/useCampusData";
 
@@ -688,8 +689,20 @@ export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGr
 
 // Parent component: TimetablePreview
 export function TimetablePreview() {
-  const { colorSchema, faculty, timetables } = useCampusData();
+  const { colorSchema, faculty, timetables, solverRunId } = useCampusData();
   const isTeal = colorSchema === "teal";
+
+  // Check if a timetable has actually been generated
+  const isTimetableGenerated = useMemo(() => {
+    if (solverRunId) return true;
+    
+    return Object.values(timetables).some((groupSchedule) => {
+      return Object.values(groupSchedule).some((daySlots) => {
+        return daySlots && daySlots.some((slot) => slot !== null);
+      });
+    });
+  }, [timetables, solverRunId]);
+
   const availableWeeks = Object.keys(weeksEventData);
   const [currentWeek, setCurrentWeek] = useState(availableWeeks[0]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -940,13 +953,46 @@ export function TimetablePreview() {
       });
     }
 
-    // If no events compiled yet (e.g. initial render with empty data), fall back to standard mock events
+    // If no events compiled yet (e.g. initial render with empty data), fall back to standard mock events only if generated
     if (compiledEvents.length === 0) {
-      return weeksEventData[currentWeek] || [];
+      if (isTimetableGenerated) {
+        return weeksEventData[currentWeek] || [];
+      }
+      return [];
     }
 
     return compiledEvents;
-  }, [viewType, activeClass, activeFaculty, timetables, faculty, currentWeek]);
+  }, [viewType, activeClass, activeFaculty, timetables, faculty, currentWeek, isTimetableGenerated]);
+
+  if (!isTimetableGenerated) {
+    return (
+      <div className="w-full max-w-[1000px] bg-white border border-[#e5e7eb] dark:bg-[#1e293b] dark:border-[#334155] rounded-2xl p-8 sm:p-12 text-center flex flex-col items-center justify-center min-h-[400px] shadow-sm select-none animate-in fade-in duration-300">
+        <div className={cn(
+          "grid h-16 w-16 place-items-center rounded-2xl border mb-6",
+          isTeal
+            ? "bg-[#e8f4f4] border-[#3c6e71]/20 text-[#3c6e71]"
+            : "bg-[#EEEDFE] border-[#534AB7]/20 text-[#534AB7]"
+        )}>
+          <CalendarCheck className="h-8 w-8" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+          No Timetable Generated Yet
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm mb-6 leading-relaxed">
+          There are no scheduled lectures or cohorts to display. Please run the AI Schedule Generator to build your optimized college schedule.
+        </p>
+        <Link
+          to="/generate"
+          className={cn(
+            "inline-flex items-center justify-center text-xs font-semibold px-4 py-2.5 rounded-xl text-white shadow-sm transition cursor-pointer border-0",
+            isTeal ? "bg-[#3c6e71] hover:bg-[#2e5557]" : "bg-[#534AB7] hover:bg-[#3C3489]"
+          )}
+        >
+          Go to AI Generator
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-[1000px] bg-white border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:bg-[#1e293b] dark:border-[#334155] dark:shadow-none rounded-2xl p-6 sm:p-8 animate-in fade-in duration-300 transition-all">
