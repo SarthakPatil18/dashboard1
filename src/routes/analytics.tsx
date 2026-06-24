@@ -39,7 +39,8 @@ export const Route = createFileRoute("/analytics")({
 
 function AnalyticsPage() {
   const { rooms, timetables, checkConflicts } = useCampusData();
-  const [selectedRoom, setSelectedRoom] = useState(rooms[0]?.id || "A-201");
+  const [selectedRoomState, setSelectedRoom] = useState("");
+  const activeRoomId = selectedRoomState || rooms[0]?.id || "";
 
   // Determine what is scheduled in selectedRoom at a specific slot
   const getRoomSlotInfo = (day: string, periodIndex: number) => {
@@ -50,7 +51,7 @@ function AnalyticsPage() {
       // Don't inspect alt schedules
       if (gId === "Timetable A" || gId === "Timetable B" || gId === "Timetable C") return;
       const slot = timetables[gId]?.[day]?.[periodIndex];
-      if (slot && slot.room === selectedRoom) {
+      if (slot && slot.room === activeRoomId) {
         scheduledGroup = gId;
         scheduledSlot = slot;
       }
@@ -92,7 +93,7 @@ function AnalyticsPage() {
           action={
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground font-medium">Select Room:</span>
-              <Select value={selectedRoom} onValueChange={setSelectedRoom}>
+              <Select value={activeRoomId} onValueChange={setSelectedRoom}>
                 <SelectTrigger className="h-8 w-32 rounded-lg text-xs bg-card border border-border">
                   <SelectValue placeholder="Room" />
                 </SelectTrigger>
