@@ -406,46 +406,14 @@ const colorPalettes = [
 
 // Category styles mapping based on the course-differentiating colors
 const getCategoryClasses = (event: TimetableEvent) => {
-  const name = event.courseName.toLowerCase();
-  const code = event.courseCode?.toLowerCase() || "";
-
-  // 1. Amber (CSC401 - Data Structures)
-  if (name.includes("data structures") || code.includes("csc401")) {
-    return colorPalettes[2];
+  const category = (event.category || "theory").toLowerCase();
+  if (category === "lab") {
+    return colorPalettes[1]; // Emerald (Lab)
   }
-  // 2. Emerald (BIO201 - Cell Biology Lab)
-  if (name.includes("cell biology") || code.includes("bio201")) {
-    return colorPalettes[1];
+  if (category === "elective") {
+    return colorPalettes[5]; // Rose (Elective)
   }
-  // 3. Orange (HIS110 - World History)
-  if (name.includes("world history") || code.includes("his110")) {
-    return colorPalettes[3];
-  }
-  // 4. Teal (ENG210 - Creative Writing)
-  if (name.includes("creative writing") || code.includes("eng210")) {
-    return colorPalettes[4];
-  }
-  // 5. Rose (Theory - Lab Biology)
-  if (name.includes("theory - lab biology")) {
-    return colorPalettes[5];
-  }
-  // 6. Cyan (Lab Lab Lecture)
-  if (name.includes("lab lab lecture")) {
-    return colorPalettes[6];
-  }
-  // 7. Pink (Elective Lecture Lecture)
-  if (name.includes("elective lecture lecture")) {
-    return colorPalettes[7];
-  }
-
-  // Dynamic hashing for dynamic classes
-  let hash = 0;
-  const combined = (code + name).trim();
-  for (let i = 0; i < combined.length; i++) {
-    hash = combined.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % colorPalettes.length;
-  return colorPalettes[index];
+  return colorPalettes[0]; // Violet (Theory)
 };
 
 // Subcomponent: TimetableHeader
@@ -554,13 +522,22 @@ export function EventCard({ event, matchesSearch, onClick }: EventCardProps) {
   const topPercent = (startMins / 660) * 100;
   const heightPercent = ((endMins - startMins) / 660) * 100;
 
-  const hasExtraInfo = event.professor || event.room;
+  const titleText = event.courseCode
+    ? `${event.courseCode} – ${event.courseName}`
+    : event.courseName;
+
+  const timeText = `${event.startTime}–${event.endTime}`;
+  const facultyRoomText = [event.professor, event.room].filter(Boolean).join(" · ");
+
+  // Tooltip content showing complete details on hover
+  const tooltipText = `${titleText}\nTime: ${timeText}${event.professor ? `\nFaculty: ${event.professor}` : ""}${event.room ? `\nRoom/Lab: ${event.room}` : ""}`;
 
   return (
     <div
       onClick={onClick}
+      title={tooltipText}
       className={cn(
-        "absolute rounded-[10px] py-[8px] px-[10px] flex flex-col justify-center transition-all duration-300 text-left select-none cursor-pointer shadow-none",
+        "absolute rounded-[10px] py-[6px] px-[10px] flex flex-col justify-start gap-y-[2px] transition-all duration-300 text-left select-none cursor-pointer shadow-none overflow-hidden",
         classes.card,
         matchesSearch
           ? "opacity-100"
@@ -569,27 +546,22 @@ export function EventCard({ event, matchesSearch, onClick }: EventCardProps) {
       style={{
         top: `${topPercent}%`,
         height: `${heightPercent}%`,
+        minHeight: "50px",
         left: "5px",
         right: "5px",
       }}
     >
-      <div className="font-medium text-[11px] sm:text-[12px] leading-tight truncate">
-        {event.courseCode
-          ? `${event.courseCode} – ${event.courseName}`
-          : event.courseName}
+      <div className="font-semibold text-[11px] leading-tight truncate w-full">
+        {titleText}
       </div>
-      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5 leading-none">
-        <span className={cn("text-[9px] sm:text-[10px] font-normal opacity-75", classes.sub)}>
-          {event.startTime}–{event.endTime}
-        </span>
-        {hasExtraInfo && (
-          <span className={cn("text-[9px] sm:text-[10px] font-normal opacity-75 border-l border-current/25 pl-1.5 truncate", classes.sub)}>
-            {event.professor && event.room
-              ? `${event.professor} · ${event.room}`
-              : event.professor || event.room}
-          </span>
-        )}
+      <div className="text-[10px] font-medium leading-none opacity-85 mt-0.5 truncate w-full">
+        {timeText}
       </div>
+      {facultyRoomText && (
+        <div className="text-[9px] font-normal leading-none opacity-75 mt-0.5 truncate w-full">
+          {facultyRoomText}
+        </div>
+      )}
     </div>
   );
 }

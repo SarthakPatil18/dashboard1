@@ -39,27 +39,27 @@ const getSlotStyleByType = (type: SlotType) => {
   switch (type) {
     case "theory":
       return {
-        bg: "bg-[#ede9fe]",
-        border: "border border-[#c4b5fd]",
-        text: "text-[#5b21b6]"
+        bg: "bg-[#E8E4F8]",
+        border: "border border-[#3C3489]/25",
+        text: "text-[#3C3489]"
       };
     case "lab":
       return {
-        bg: "bg-[#d1fae5]",
-        border: "border border-[#6ee7b7]",
-        text: "text-[#064e3b]"
+        bg: "bg-[#D6F0E8]",
+        border: "border border-[#0F6E56]/25",
+        text: "text-[#0F6E56]"
       };
     case "elective":
       return {
-        bg: "bg-[#ffe4e6]",
-        border: "border border-[#fda4af]",
-        text: "text-[#881337]"
+        bg: "bg-[#FAE0D4]",
+        border: "border border-[#7B3A20]/25",
+        text: "text-[#7B3A20]"
       };
     default:
       return {
-        bg: "bg-[#ede9fe]",
-        border: "border border-[#c4b5fd]",
-        text: "text-[#5b21b6]"
+        bg: "bg-[#E8E4F8]",
+        border: "border border-[#3C3489]/25",
+        text: "text-[#3C3489]"
       };
   }
 };
@@ -193,6 +193,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                     >
                       {slot ? (
                         <div
+                          title={`${subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - ${slot.subject}\nFaculty: ${slot.faculty}\nRoom: ${slot.room}`}
                           className={cn(
                             "rounded-[10px] p-2 flex flex-col justify-between h-full select-none text-left shadow-none",
                             getSlotStyleByType(slot.type).bg,
@@ -341,6 +342,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                     >
                       {slot && matchesSearch ? (
                         <div
+                          title={`${subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - ${slot.subject}\nFaculty: ${slot.faculty}\nRoom: ${slot.room}`}
                           className={cn(
                             "rounded-[10px] py-[8px] px-[10px] flex flex-col justify-between h-full select-none text-left transition-transform duration-200 shadow-none",
                             getSlotStyleByType(slot.type).bg,
@@ -351,7 +353,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                           )}
                         >
                           <div className="min-w-0 flex items-start justify-between gap-1">
-                            <p className="text-[12px] font-medium leading-snug tracking-tight">
+                            <p className="text-[12px] font-medium leading-snug tracking-tight truncate w-full">
                               {subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - {slot.subject}
                             </p>
                             {hasConflicts && (
