@@ -29,6 +29,11 @@ function TimetablesPage() {
   const { activeTimetableId, setActiveTimetableId, solverRunId, students } = useCampusData();
   const [editMode, setEditMode] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [cohortSearch, setCohortSearch] = useState("");
+
+  const filteredCohorts = students.filter((s) =>
+    s.id.toLowerCase().includes(cohortSearch.toLowerCase())
+  );
 
   useEffect(() => {
     // Override page background specifically for this screen
@@ -65,16 +70,30 @@ function TimetablesPage() {
         {/* Class Selector Dropdown */}
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-[#5F5E5A] uppercase tracking-wider">Cohort:</span>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Filter cohorts..."
+              value={cohortSearch}
+              onChange={(e) => setCohortSearch(e.target.value)}
+              className="h-8 w-28 px-2.5 text-xs rounded-lg border border-gray-200 bg-white text-[#1F2937] outline-none placeholder-gray-400 focus:border-[#3c6e71] focus:ring-1 focus:ring-[#3c6e71]/25 transition"
+            />
+          </div>
           <Select value={activeTimetableId} onValueChange={setActiveTimetableId}>
-            <SelectTrigger className="h-8 w-[150px] bg-white border border-gray-200 text-xs font-semibold rounded-lg text-[#1F2937] shadow-none focus:ring-0">
+            <SelectTrigger className="h-8 w-[140px] bg-white border border-gray-200 text-xs font-semibold rounded-lg text-[#1F2937] shadow-none focus:ring-0">
               <SelectValue placeholder="Select cohort" />
             </SelectTrigger>
             <SelectContent>
-              {students.map((group) => (
+              {filteredCohorts.map((group) => (
                 <SelectItem key={group.id} value={group.id} className="text-xs">
                   {group.id}
                 </SelectItem>
               ))}
+              {filteredCohorts.length === 0 && (
+                <div className="p-2 text-center text-xs text-muted-foreground select-none">
+                  No cohort found
+                </div>
+              )}
             </SelectContent>
           </Select>
         </div>
