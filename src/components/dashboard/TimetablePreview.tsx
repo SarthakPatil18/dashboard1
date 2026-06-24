@@ -27,8 +27,8 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     // Monday
     {
       day: "Monday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseCode: "CSC401",
       courseName: "Data Structures",
       professor: "Prof. Smith",
@@ -37,23 +37,23 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Monday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Theory Lab Lecture",
       category: "theory",
     },
     {
       day: "Monday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseName: "Elective Lecture Lecture",
       category: "elective",
     },
     // Tuesday
     {
       day: "Tuesday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseCode: "CSC401",
       courseName: "Data Structures",
       professor: "Prof. Smith",
@@ -62,8 +62,8 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Tuesday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseCode: "BIO201",
       courseName: "Cell Biology Lab",
       professor: "Dr. Jones",
@@ -72,23 +72,23 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Tuesday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseName: "Lab Lab Lecture",
       category: "lab",
     },
     {
       day: "Tuesday",
-      startTime: "11:00",
-      endTime: "11:50",
+      startTime: "11:25",
+      endTime: "12:20",
       courseName: "Theory Lab Lecture",
       category: "theory",
     },
     // Wednesday
     {
       day: "Wednesday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseName: "Theory - Lab Biology",
       professor: "Prof. Smith",
       room: "R301",
@@ -96,16 +96,16 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Wednesday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseName: "Thouny Lab Lecture",
       category: "theory",
     },
     // Thursday
     {
       day: "Thursday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseName: "Lab Lab Lecture",
       professor: "Dr. Jones",
       room: "R405",
@@ -113,15 +113,15 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Thursday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Theory Lab Lecture",
       category: "lab",
     },
     {
       day: "Thursday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseCode: "HIS110",
       courseName: "World History",
       professor: "Dr. Evans",
@@ -130,31 +130,31 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Thursday",
-      startTime: "11:00",
-      endTime: "11:50",
+      startTime: "11:25",
+      endTime: "12:20",
       courseName: "Theory Lab Lecture",
       category: "lab",
     },
     // Friday
     {
       day: "Friday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseName: "Theory - Lab Lecture",
       room: "R301",
       category: "theory",
     },
     {
       day: "Friday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Elective Lecture Lecture",
       category: "theory",
     },
     {
       day: "Friday",
-      startTime: "11:00",
-      endTime: "11:50",
+      startTime: "11:25",
+      endTime: "12:20",
       courseCode: "ENG210",
       courseName: "Creative Writing",
       professor: "Prof. Davis",
@@ -166,8 +166,8 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     // Monday
     {
       day: "Monday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseCode: "CSC401",
       courseName: "Data Structures",
       professor: "Prof. Smith",
@@ -176,16 +176,16 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Monday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Theory Lab Lecture",
       category: "theory",
     },
     // Tuesday
     {
       day: "Tuesday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseCode: "BIO201",
       courseName: "Cell Biology Lab",
       professor: "Dr. Jones",
@@ -194,16 +194,16 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Tuesday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseName: "Lab Lab Lecture",
       category: "lab",
     },
     // Wednesday
     {
       day: "Wednesday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseName: "Theory - Lab Biology",
       professor: "Prof. Smith",
       room: "R301",
@@ -211,8 +211,8 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Wednesday",
-      startTime: "11:00",
-      endTime: "11:50",
+      startTime: "11:25",
+      endTime: "12:20",
       courseCode: "MTH301",
       courseName: "Advanced Calculus",
       professor: "Prof. Johnson",
@@ -222,8 +222,8 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     // Thursday
     {
       day: "Thursday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseName: "Lab Lab Lecture",
       professor: "Dr. Jones",
       room: "R405",
@@ -231,8 +231,8 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     },
     {
       day: "Thursday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseCode: "HIS110",
       courseName: "World History",
       professor: "Dr. Evans",
@@ -242,16 +242,16 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     // Friday
     {
       day: "Friday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseName: "Theory - Lab Lecture",
       room: "R301",
       category: "theory",
     },
     {
       day: "Friday",
-      startTime: "11:00",
-      endTime: "11:50",
+      startTime: "11:25",
+      endTime: "12:20",
       courseCode: "ENG210",
       courseName: "Creative Writing",
       professor: "Prof. Davis",
@@ -263,23 +263,23 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     // Monday
     {
       day: "Monday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Theory Lab Lecture",
       category: "theory",
     },
     {
       day: "Monday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseName: "Elective Lecture Lecture",
       category: "elective",
     },
     // Tuesday
     {
       day: "Tuesday",
-      startTime: "08:00",
-      endTime: "08:50",
+      startTime: "08:30",
+      endTime: "09:25",
       courseCode: "CSC401",
       courseName: "Data Structures",
       professor: "Prof. Smith",
@@ -289,31 +289,31 @@ export const weeksEventData: Record<string, TimetableEvent[]> = {
     // Wednesday
     {
       day: "Wednesday",
-      startTime: "10:00",
-      endTime: "10:50",
+      startTime: "10:30",
+      endTime: "11:25",
       courseName: "Thouny Lab Lecture",
       category: "theory",
     },
     // Thursday
     {
       day: "Thursday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Theory Lab Lecture",
       category: "lab",
     },
     {
       day: "Thursday",
-      startTime: "11:00",
-      endTime: "11:50",
+      startTime: "11:25",
+      endTime: "12:20",
       courseName: "Theory Lab Lecture",
       category: "lab",
     },
     // Friday
     {
       day: "Friday",
-      startTime: "09:00",
-      endTime: "09:50",
+      startTime: "09:25",
+      endTime: "10:20",
       courseName: "Elective Lecture Lecture",
       category: "theory",
     },
@@ -632,24 +632,32 @@ export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGr
 
         {/* Grid Body */}
         <div className="grid grid-cols-[64px_repeat(6,1fr)] relative h-[560px] mt-2.5">
-          {/* Horizontal Hour Lines (absolute background) */}
+          {/* Horizontal Period Lines (absolute background) */}
           {[
-            { label: "8 AM", top: 0 },
-            { label: "9 AM", top: (1 / 11) * 100 },
-            { label: "10 AM", top: (2 / 11) * 100 },
-            { label: "11 AM", top: (3 / 11) * 100 },
-            { label: "12 PM", top: (4 / 11) * 100 },
-            { label: "1 PM", top: (5 / 11) * 100 },
-            { label: "2 PM", top: (6 / 11) * 100 },
-            { label: "3 PM", top: (7 / 11) * 100 },
-            { label: "4 PM", top: (8 / 11) * 100 },
-            { label: "5 PM", top: (9 / 11) * 100 },
-            { label: "6 PM", top: (10 / 11) * 100 },
-            { label: "7 PM", top: 100 }
+            { label: "08:30", top: (30 / 660) * 100, showLabel: true },
+            { label: "09:25", top: (85 / 660) * 100, showLabel: true },
+            { label: "10:20", top: (140 / 660) * 100, showLabel: false },
+            { label: "10:30", top: (150 / 660) * 100, showLabel: true },
+            { label: "11:25", top: (205 / 660) * 100, showLabel: true },
+            { label: "12:20", top: (260 / 660) * 100, showLabel: true },
+            { label: "13:15", top: (315 / 660) * 100, showLabel: true },
+            { label: "14:10", top: (370 / 660) * 100, showLabel: true },
+            { label: "15:05", top: (425 / 660) * 100, showLabel: false },
+            { label: "15:10", top: (430 / 660) * 100, showLabel: true },
+            { label: "16:00", top: (480 / 660) * 100, showLabel: true },
+            { label: "16:50", top: (530 / 660) * 100, showLabel: false },
+            { label: "16:55", top: (535 / 660) * 100, showLabel: true },
+            { label: "17:45", top: (585 / 660) * 100, showLabel: true },
+            { label: "18:35", top: (635 / 660) * 100, showLabel: true },
           ].map((pos) => (
             <div
               key={pos.label}
-              className="absolute left-[64px] right-0 border-t-[0.5px] border-[#e5e7eb] dark:border-[#4b5563]/40 z-0"
+              className={cn(
+                "absolute left-[64px] right-0 z-0",
+                pos.showLabel
+                  ? "border-t-[0.5px] border-[#e5e7eb] dark:border-[#4b5563]/40"
+                  : "border-t-[0.5px] border-dashed border-[#e5e7eb]/60 dark:border-[#4b5563]/20"
+              )}
               style={{ top: `${pos.top}%` }}
             />
           ))}
@@ -657,22 +665,22 @@ export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGr
           {/* Time Labels (Gutter) */}
           <div className="relative h-full z-10">
             {[
-              { label: "8 AM", top: 0 },
-              { label: "9 AM", top: (1 / 11) * 100 },
-              { label: "10 AM", top: (2 / 11) * 100 },
-              { label: "11 AM", top: (3 / 11) * 100 },
-              { label: "12 PM", top: (4 / 11) * 100 },
-              { label: "1 PM", top: (5 / 11) * 100 },
-              { label: "2 PM", top: (6 / 11) * 100 },
-              { label: "3 PM", top: (7 / 11) * 100 },
-              { label: "4 PM", top: (8 / 11) * 100 },
-              { label: "5 PM", top: (9 / 11) * 100 },
-              { label: "6 PM", top: (10 / 11) * 100 },
-              { label: "7 PM", top: 100 }
+              { label: "08:30", top: (30 / 660) * 100 },
+              { label: "09:25", top: (85 / 660) * 100 },
+              { label: "10:30", top: (150 / 660) * 100 },
+              { label: "11:25", top: (205 / 660) * 100 },
+              { label: "12:20", top: (260 / 660) * 100 },
+              { label: "13:15", top: (315 / 660) * 100 },
+              { label: "14:10", top: (370 / 660) * 100 },
+              { label: "15:10", top: (430 / 660) * 100 },
+              { label: "16:00", top: (480 / 660) * 100 },
+              { label: "16:55", top: (535 / 660) * 100 },
+              { label: "17:45", top: (585 / 660) * 100 },
+              { label: "18:35", top: (635 / 660) * 100 },
             ].map((pos) => (
               <div
                 key={pos.label}
-                className="absolute right-4 text-[12px] font-normal text-[#9ca3af] dark:text-[#d1d5db] select-none -translate-y-1/2 whitespace-nowrap"
+                className="absolute right-4 text-[11px] font-semibold text-[#9ca3af] dark:text-[#d1d5db] select-none -translate-y-1/2 whitespace-nowrap"
                 style={{ top: `${pos.top}%` }}
               >
                 {pos.label}
