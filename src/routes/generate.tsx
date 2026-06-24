@@ -398,39 +398,51 @@ function GeneratePage() {
 
             {step === 2 && (
               <SectionCard title="Step 3 · AI Processing" subtitle="Running the optimization pipeline" icon={<Cpu className="h-4 w-4 text-primary" />}>
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {pipeline.map((p, i) => {
                     const status = pipeStage > i ? "done" : pipeStage === i ? "active" : "idle";
                     return (
-                      <div key={p.label} className="flex flex-1 items-center gap-3 lg:flex-col lg:items-stretch">
-                        <div
-                          className={cn(
-                            "flex flex-1 items-center gap-3 rounded-2xl border p-4 transition",
-                            status === "done" && (isTeal ? "border-[#3c6e71]/20 bg-[#e8f4f4]" : "border-[#534AB7]/20 bg-[#EEEDFE]"),
-                            status === "active" && (isTeal ? "border-[#3c6e71]/50 bg-[#e8f4f4] animate-pulse-ring" : "border-[#534AB7]/50 bg-[#EEEDFE] animate-pulse-ring"),
-                            status === "idle" && "border-border bg-secondary/30 opacity-60",
-                          )}
-                        >
-                          <div className={cn(
-                            "grid h-10 w-10 shrink-0 place-items-center rounded-xl",
-                            status === "done" 
-                              ? (isTeal ? "bg-[#e8f4f4] text-[#3c6e71]" : "bg-[#EEEDFE] text-[#534AB7]") 
-                              : status === "active" 
-                              ? (isTeal ? "bg-[#3c6e71] text-white" : "bg-[#534AB7] text-white") 
-                              : "bg-gray-100 text-muted-foreground"
-                          )}>
-                            {status === "done" ? <CheckCircle2 className={cn("h-5 w-5", isTeal ? "text-[#3c6e71]" : "text-[#534AB7]")} /> : <p.icon className="h-5 w-5" />}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-[#1f2937]">{p.label}</p>
-                            <p className="truncate text-[11px] text-[#6b7280]">
-                              {status === "done" ? "Completed" : status === "active" ? "Processing…" : "Queued"}
-                            </p>
-                          </div>
-                        </div>
-                        {i < pipeline.length - 1 && (
-                          <ArrowRight className="hidden h-4 w-4 shrink-0 rotate-90 text-[#9ca3af] lg:block lg:rotate-0" />
+                      <div
+                        key={p.label}
+                        className={cn(
+                          "relative flex items-center gap-4 rounded-2xl border p-4.5 transition bg-white shadow-sm overflow-hidden",
+                          status === "done" && (isTeal ? "border-[#3c6e71]/20 bg-[#e8f4f4]/40" : "border-[#534AB7]/20 bg-[#EEEDFE]/40"),
+                          status === "active" && (isTeal ? "border-[#3c6e71]/50 bg-[#e8f4f4] ring-2 ring-[#3c6e71]/10 animate-pulse-ring" : "border-[#534AB7]/50 bg-[#EEEDFE] ring-2 ring-[#534AB7]/10 animate-pulse-ring"),
+                          status === "idle" && "border-[#e5e7eb] bg-gray-50/30 opacity-60",
                         )}
+                      >
+                        {/* Step Number Badge */}
+                        <div className="absolute top-2.5 right-3.5 text-[9px] font-bold tracking-wider text-muted-foreground/30 select-none">
+                          STEP {i + 1}
+                        </div>
+
+                        {/* Status Icon */}
+                        <div className={cn(
+                          "grid h-11 w-11 shrink-0 place-items-center rounded-xl border transition-colors",
+                          status === "done" 
+                            ? (isTeal ? "bg-[#e8f4f4] border-[#3c6e71]/20 text-[#3c6e71]" : "bg-[#EEEDFE] border-[#534AB7]/20 text-[#534AB7]") 
+                            : status === "active" 
+                            ? (isTeal ? "bg-[#3c6e71] border-transparent text-white" : "bg-[#534AB7] border-transparent text-white") 
+                            : "bg-gray-50 border-gray-200 text-muted-foreground"
+                        )}>
+                          {status === "done" ? <CheckCircle2 className="h-5 w-5" /> : <p.icon className="h-5 w-5" />}
+                        </div>
+
+                        <div className="min-w-0 flex-1 pr-6 mt-1">
+                          <p className="truncate text-sm font-semibold text-[#1f2937]">{p.label}</p>
+                          <p className="truncate text-[11px] font-medium text-[#6b7280]">
+                            {status === "done" ? (
+                              <span className={isTeal ? "text-[#3c6e71]" : "text-[#534AB7]"}>Completed</span>
+                            ) : status === "active" ? (
+                              <span className="flex items-center gap-1.5">
+                                <span className="h-1.5 w-1.5 rounded-full bg-current animate-ping" />
+                                Processing…
+                              </span>
+                            ) : (
+                              "Queued"
+                            )}
+                          </p>
+                        </div>
                       </div>
                     );
                   })}
