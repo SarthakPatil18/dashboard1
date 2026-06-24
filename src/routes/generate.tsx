@@ -112,16 +112,19 @@ function GeneratePage() {
         if (!ab) return;
         
         const wb = XLSX.read(ab, { type: "array" });
-        const sheetName = wb.SheetNames.includes("Overview") ? "Overview" : wb.SheetNames[0];
-        const sheet = wb.Sheets[sheetName];
-        const data = XLSX.utils.sheet_to_json(sheet);
-
-        importMasterTimetable(data);
+        if (wb.SheetNames.includes("Overview")) {
+          const sheet = wb.Sheets["Overview"];
+          const data = XLSX.utils.sheet_to_json(sheet);
+          importMasterTimetable(data);
+          toast.success("Pre-generated master timetable imported successfully.");
+        } else {
+          toast.success("Configuration workbook loaded. Ready to run solver.");
+        }
         
         setUploaded(files.map((f) => f.name));
       } catch (err) {
         console.error(err);
-        toast.error(`Error parsing master Excel sheet: ${(err as Error).message}`);
+        toast.error(`Error parsing Excel sheet: ${(err as Error).message}`);
       }
     };
     reader.readAsArrayBuffer(file);
@@ -257,9 +260,9 @@ function GeneratePage() {
                     <FileSpreadsheet className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-[#1f2937]">Upload Master Timetable (FY_TT.xlsx)</h4>
+                    <h4 className="text-sm font-medium text-[#1f2937]">Upload Configuration Workbook (FY.xlsx)</h4>
                     <p className="text-xs text-[#6b7280] max-w-md mt-1">
-                      Instantly load all 129+ Faculty, 53+ Rooms, 24+ Subjects, 179+ Classes, and conflict-free schedules in a single click.
+                      Instantly load Faculty, Rooms, and Time configurations to initialize the AI scheduling run.
                     </p>
                   </div>
                   <input
@@ -281,7 +284,7 @@ function GeneratePage() {
                     onClick={() => document.getElementById("master-tt-upload")?.click()}
                   >
                     <UploadCloud className="h-3.5 w-3.5 mr-2" />
-                    Select FY_TT.xlsx File
+                    Select FY.xlsx File
                   </Button>
                 </div>
 
