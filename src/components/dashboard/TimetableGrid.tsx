@@ -177,8 +177,9 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                 className="grid grid-cols-[60px_repeat(6,1fr)] border-b-[0.5px] border-[#e5e7eb] last:border-b-0 min-h-[74px] items-stretch"
               >
                 {/* Time Label */}
-                <div className="text-[11px] text-[#9ca3af] font-normal text-right pr-2.5 pt-2.5 select-none">
-                  {timeLabels[period.split("–")[0]] || period.split("–")[0]}
+                <div className="text-[10px] text-[#9ca3af] font-normal text-right pr-2.5 pt-2 select-none whitespace-nowrap leading-tight">
+                  <div className="font-semibold text-gray-700 dark:text-gray-300">{period.split("–")[0]}</div>
+                  <div className="text-[9px] opacity-75">{period.split("–")[1]}</div>
                 </div>
 
                 {/* Day Slots */}
@@ -310,9 +311,10 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                 key={period}
                 className="grid grid-cols-[60px_repeat(6,1fr)] border-b-[0.5px] border-[#e5e7eb] last:border-b-0 min-h-[90px] items-stretch"
               >
-                {/* Time Label (8 AM, 9 AM...) */}
-                <div className="text-[12px] text-[#9ca3af] font-normal text-right pr-3 pt-3.5 select-none">
-                  {timeLabels[period.split("–")[0]] || period.split("–")[0]}
+                {/* Time Label (08:30-09:25...) */}
+                <div className="text-[11px] text-[#9ca3af] font-normal text-right pr-3 pt-3.5 select-none whitespace-nowrap leading-tight">
+                  <div className="font-semibold text-gray-700 dark:text-gray-300">{period.split("–")[0]}</div>
+                  <div className="text-[10px] opacity-75">{period.split("–")[1]}</div>
                 </div>
 
                 {/* Day Columns */}

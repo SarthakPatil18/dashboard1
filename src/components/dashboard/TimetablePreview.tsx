@@ -537,6 +537,7 @@ export function TimetableLegend() {
   );
 }
 
+
 // Subcomponent: EventCard
 interface EventCardProps {
   event: TimetableEvent;
@@ -572,18 +573,23 @@ export function EventCard({ event, matchesSearch, onClick }: EventCardProps) {
         right: "5px",
       }}
     >
-      <div className="font-medium text-[12px] leading-tight line-clamp-2">
+      <div className="font-medium text-[11px] sm:text-[12px] leading-tight truncate">
         {event.courseCode
           ? `${event.courseCode} – ${event.courseName}`
           : event.courseName}
       </div>
-      {hasExtraInfo && (
-        <div className={cn("text-[11px] mt-0.5 truncate leading-none font-normal opacity-85", classes.sub)}>
-          {event.professor && event.room
-            ? `${event.professor} · ${event.room}`
-            : event.professor || event.room}
-        </div>
-      )}
+      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5 leading-none">
+        <span className={cn("text-[9px] sm:text-[10px] font-normal opacity-75", classes.sub)}>
+          {event.startTime}–{event.endTime}
+        </span>
+        {hasExtraInfo && (
+          <span className={cn("text-[9px] sm:text-[10px] font-normal opacity-75 border-l border-current/25 pl-1.5 truncate", classes.sub)}>
+            {event.professor && event.room
+              ? `${event.professor} · ${event.room}`
+              : event.professor || event.room}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
