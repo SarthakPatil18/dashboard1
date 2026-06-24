@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, Search, Sparkles, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCampusData } from "@/hooks/useCampusData";
@@ -329,7 +329,7 @@ const daysOfWeek = [
   "Saturday",
 ] as const;
 
-const timeLabels = ["8 AM", "9 AM", "10 AM", "11 AM", "12 AM"];
+const timeLabels = ["8 AM", "10 AM", "12 PM", "2 PM", "4 PM", "6 PM", "7 PM"];
 
 // Category styles mapping based on the 8 course-differentiating colors
 const getCategoryClasses = (event: TimetableEvent) => {
@@ -509,9 +509,9 @@ export function EventCard({ event, matchesSearch, onClick }: EventCardProps) {
   const startMins = timeToMinutes(event.startTime);
   const endMins = timeToMinutes(event.endTime);
 
-  // Total grid span is 4 hours = 240 mins (from 08:00 to 12:00)
-  const topPercent = (startMins / 240) * 100;
-  const heightPercent = ((endMins - startMins) / 240) * 100;
+  // Total grid span is 11 hours = 660 mins (from 08:00 to 19:00)
+  const topPercent = (startMins / 660) * 100;
+  const heightPercent = ((endMins - startMins) / 660) * 100;
 
   const hasExtraInfo = event.professor || event.room;
 
@@ -585,7 +585,7 @@ export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGr
         </div>
 
         {/* Grid Body */}
-        <div className="grid grid-cols-[64px_repeat(6,1fr)] relative h-[360px] mt-2.5">
+        <div className="grid grid-cols-[64px_repeat(6,1fr)] relative h-[560px] mt-2.5">
           {/* Horizontal Hour Lines (absolute background) */}
           {[0, 1, 2, 3, 4].map((i) => (
             <div
@@ -636,13 +636,40 @@ export function TimetableGrid({ events, searchQuery, onEventClick }: TimetableGr
 
 // Parent component: TimetablePreview
 export function TimetablePreview() {
-  const { colorSchema } = useCampusData();
+  const { colorSchema, faculty, timetables } = useCampusData();
   const isTeal = colorSchema === "teal";
   const availableWeeks = Object.keys(weeksEventData);
   const [currentWeek, setCurrentWeek] = useState(availableWeeks[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEvent, setSelectedEvent] = useState<TimetableEvent | null>(null);
   const [isDark, setIsDark] = useState(false);
+
+  // Selector states
+  const [viewType, setViewType] = useState<"class" | "faculty">("class");
+  const classList = useMemo(() => {
+    return Object.keys(timetables).filter(
+      (gId) => gId !== "Timetable A" && gId !== "Timetable B" && gId !== "Timetable C"
+    );
+  }, [timetables]);
+  const [selectedClass, setSelectedClass] = useState("");
+  const [selectedFaculty, setSelectedFaculty] = useState("");
+
+  const activeClass = selectedClass || classList[0] || "CSE-3A";
+  const activeFaculty = selectedFaculty || faculty[0]?.name || "Dr. Anil Mehra";
+
+  // Auto-select first class when classList changes
+  useEffect(() => {
+    if (classList.length > 0 && !selectedClass) {
+      setSelectedClass(classList[0]);
+    }
+  }, [classList]);
+
+  // Auto-select first faculty when faculty list changes
+  useEffect(() => {
+    if (faculty.length > 0 && !selectedFaculty) {
+      setSelectedFaculty(faculty[0].name);
+    }
+  }, [faculty]);
 
   // Sync state with HTML's class list
   useEffect(() => {
@@ -673,12 +700,98 @@ export function TimetablePreview() {
     }
   };
 
-  const events = weeksEventData[currentWeek] || [];
+  // Compile dynamic events from live database
+  const dynamicEvents = useMemo(() => {
+    const timeSlots = [
+      { start: "08:30", end: "09:25" },
+      { start: "09:25", end: "10:20" },
+      { start: "10:30", end: "11:25" },
+      { start: "11:25", end: "12:20" },
+      { start: "13:15", end: "14:10" },
+      { start: "14:10", end: "15:05" },
+      { start: "15:10", end: "16:00" },
+      { start: "16:00", end: "16:50" },
+      { start: "16:55", end: "17:45" },
+      { start: "17:45", end: "18:35" },
+    ];
+
+    const dayFullMap: Record<string, string> = {
+      Mon: "Monday",
+      Tue: "Tuesday",
+      Wed: "Wednesday",
+      Thu: "Thursday",
+      Fri: "Friday",
+      Sat: "Saturday",
+    };
+
+    const compiledEvents: TimetableEvent[] = [];
+
+    if (viewType === "class") {
+      const schedule = timetables[activeClass];
+      if (schedule) {
+        Object.keys(schedule).forEach((day) => {
+          const dayName = dayFullMap[day];
+          if (!dayName) return;
+          const slots = schedule[day] || [];
+          slots.forEach((slot, idx) => {
+            if (slot && idx < timeSlots.length) {
+              compiledEvents.push({
+                day: dayName as any,
+                startTime: timeSlots[idx].start,
+                endTime: timeSlots[idx].end,
+                courseCode: slot.subject.substring(0, 7).toUpperCase(),
+                courseName: slot.subject,
+                professor: slot.faculty,
+                room: slot.room,
+                category: slot.type === "lab" ? "lab" : slot.type === "elective" ? "elective" : "theory",
+              });
+            }
+          });
+        });
+      }
+    } else {
+      // Faculty-wise
+      const activeGroups = Object.keys(timetables).filter(
+        (gId) => gId !== "Timetable A" && gId !== "Timetable B" && gId !== "Timetable C"
+      );
+
+      activeGroups.forEach((gId) => {
+        const schedule = timetables[gId];
+        if (!schedule) return;
+        Object.keys(schedule).forEach((day) => {
+          const dayName = dayFullMap[day];
+          if (!dayName) return;
+          const slots = schedule[day] || [];
+          slots.forEach((slot, idx) => {
+            if (slot && slot.faculty === activeFaculty && idx < timeSlots.length) {
+              compiledEvents.push({
+                day: dayName as any,
+                startTime: timeSlots[idx].start,
+                endTime: timeSlots[idx].end,
+                courseCode: slot.subject.substring(0, 7).toUpperCase(),
+                courseName: `${slot.subject} (${gId})`,
+                professor: slot.faculty,
+                room: slot.room,
+                category: slot.type === "lab" ? "lab" : slot.type === "elective" ? "elective" : "theory",
+              });
+            }
+          });
+        });
+      });
+    }
+
+    // If no events compiled yet (e.g. initial render with empty data), fall back to standard mock events
+    if (compiledEvents.length === 0) {
+      return weeksEventData[currentWeek] || [];
+    }
+
+    return compiledEvents;
+  }, [viewType, activeClass, activeFaculty, timetables, faculty, currentWeek]);
 
   return (
-    <div className="w-full max-w-[1000px] bg-white border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:bg-[#374151] dark:border-[#4b5563] dark:shadow-none rounded-2xl p-6 sm:p-8 animate-in fade-in duration-300 transition-all">
+    <div className="w-full max-w-[1000px] bg-white border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:bg-[#1e293b] dark:border-[#334155] dark:shadow-none rounded-2xl p-6 sm:p-8 animate-in fade-in duration-300 transition-all">
       <TimetableHeader
-        currentWeek={currentWeek}
+        currentWeek={viewType === "class" ? `Class ${activeClass}` : `Faculty ${activeFaculty}`}
         availableWeeks={availableWeeks}
         onWeekChange={setCurrentWeek}
         searchQuery={searchQuery}
@@ -686,9 +799,71 @@ export function TimetablePreview() {
         isDark={isDark}
         onToggleTheme={toggleTheme}
       />
+
+      {/* Filter Tabs & Target Select Dropdown */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mt-4 py-3 border-b border-[#e5e7eb] dark:border-[#334155]">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setViewType("class")}
+            className={cn(
+              "px-3 py-1.5 text-xs font-semibold rounded-lg transition select-none cursor-pointer border-0",
+              viewType === "class"
+                ? isTeal
+                  ? "bg-[#3c6e71] text-white"
+                  : "bg-[#534AB7] text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            )}
+          >
+            Class Schedules
+          </button>
+          <button
+            onClick={() => setViewType("faculty")}
+            className={cn(
+              "px-3 py-1.5 text-xs font-semibold rounded-lg transition select-none cursor-pointer border-0",
+              viewType === "faculty"
+                ? isTeal
+                  ? "bg-[#3c6e71] text-white"
+                  : "bg-[#534AB7] text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            )}
+          >
+            Faculty Schedules
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">Select:</span>
+          {viewType === "class" ? (
+            <select
+              value={activeClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+              className="h-8 rounded-lg border border-gray-200 bg-white text-xs font-semibold text-gray-800 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 px-3 outline-none cursor-pointer"
+            >
+              {classList.map((cls: string) => (
+                <option key={cls} value={cls}>
+                  {cls}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <select
+              value={activeFaculty}
+              onChange={(e) => setSelectedFaculty(e.target.value)}
+              className="h-8 rounded-lg border border-gray-200 bg-white text-xs font-semibold text-gray-800 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 px-3 outline-none cursor-pointer"
+            >
+              {faculty.map((f) => (
+                <option key={f.name} value={f.name}>
+                  {f.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+      </div>
+
       <TimetableLegend />
       <TimetableGrid
-        events={events}
+        events={dynamicEvents}
         searchQuery={searchQuery}
         onEventClick={(event) => setSelectedEvent(event)}
       />

@@ -36,7 +36,7 @@ function TimetablePreviewPage() {
     <div className={cn(
       "min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 relative transition-colors duration-300 overflow-x-hidden",
       isDark
-        ? "bg-[#1f2937]"
+        ? "bg-[#0f1419]"
         : "bg-[#f9fafb]"
     )}>
       {/* Radial accent glow for depth in dark mode */}
