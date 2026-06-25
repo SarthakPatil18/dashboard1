@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Trash2, AlertTriangle, Sparkles, Search } from "lucide-react";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 // Convert 24h format in mock data to AM/PM labels exactly as per specification
 const timeLabels: Record<string, string> = {
@@ -184,7 +185,8 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                 {/* Day Slots */}
                 {days.map((day) => {
                   const slot = currentSchedule[day]?.[periodIdx];
-                  const hasConflicts = slot && checkConflicts(activeTimetableId, day, periodIdx, slot).length > 0;
+                  const cellConflicts = slot ? checkConflicts(activeTimetableId, day, periodIdx, slot) : [];
+                  const hasConflicts = cellConflicts.length > 0;
                   return (
                     <div
                       key={day}
@@ -194,25 +196,59 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                         <div
                           title={`${subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - ${slot.subject}\nFaculty: ${slot.faculty}\nRoom: ${slot.room}`}
                           className={cn(
-                            "rounded-[10px] flex flex-col justify-between h-full select-none text-left shadow-none",
+                            "rounded-[10px] flex flex-col justify-between h-full select-none text-left shadow-none p-2",
                             getSlotStyleByType(slot.type).bg,
-                            getSlotStyleByType(slot.type).border,
                             getSlotStyleByType(slot.type).text,
                             hasConflicts 
-                              ? "border-l-2 border-l-destructive pl-[6px] pr-2 py-2 bg-destructive/5 text-destructive"
-                              : "p-2"
+                              ? "border-2 border-dashed border-amber-500/80"
+                              : getSlotStyleByType(slot.type).border
                           )}
                         >
-                          <div className="min-w-0 flex items-center justify-between gap-1">
-                            <p className="text-[11px] font-medium leading-tight truncate">
+                          <div className="min-w-0 flex items-center justify-between gap-1 w-full">
+                            <p className="text-[11px] font-medium leading-tight truncate flex-1">
                               {subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"}
                             </p>
+                            {hasConflicts && (
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button 
+                                    className="focus:outline-none p-0.5 rounded hover:bg-red-500/10 transition-colors shrink-0 cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <AlertTriangle className="h-3.5 w-3.5 text-red-500 fill-red-500/5" />
+                                  </button>
+                                </PopoverTrigger>
+                                <PopoverContent 
+                                  className="z-50 w-64 rounded-xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-950 shadow-md outline-none"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <div className="space-y-1 font-sans text-left">
+                                    <p className="font-semibold text-red-800 flex items-center gap-1.5 border-b border-red-200/60 pb-1 mb-1">
+                                      <AlertTriangle className="h-4 w-4 text-red-600" />
+                                      Scheduling Conflict
+                                    </p>
+                                    {cellConflicts.map((c, idx) => (
+                                      <div key={idx} className="flex items-start gap-1">
+                                        <span className="text-red-500 mt-0.5">•</span>
+                                        <span className="leading-tight">{c.message}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
+                            )}
                           </div>
                           <div className="mt-0.5 text-[9px] font-normal opacity-85 truncate">
                             {slot.room}
                           </div>
                         </div>
-                      ) : null}
+                      ) : (
+                        <div className="h-full border border-dashed border-gray-100 rounded-[10px] flex items-center justify-center bg-gray-50/10 p-1 select-none min-h-[50px]">
+                          <span className="text-[9px] text-gray-400 font-normal italic tracking-tight opacity-60">
+                            —
+                          </span>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -321,7 +357,8 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                         slot.room.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         (subjects.find((s) => s.name === slot.subject)?.code || "").toLowerCase().includes(searchQuery.toLowerCase())));
 
-                  const hasConflicts = slot && checkConflicts(activeTimetableId, day, periodIdx, slot).length > 0;
+                  const cellConflicts = slot ? checkConflicts(activeTimetableId, day, periodIdx, slot) : [];
+                  const hasConflicts = cellConflicts.length > 0;
 
                   return (
                     <div
@@ -336,14 +373,13 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                         <div
                           title={`${subjects.find((s) => s.name === slot.subject)?.code || "SUBJ"} - ${slot.subject}\nFaculty: ${slot.faculty}\nRoom: ${slot.room}`}
                           className={cn(
-                            "rounded-[10px] py-[8px] flex flex-col justify-between h-full select-none text-left transition-transform duration-200 shadow-none",
+                            "rounded-[10px] py-[8px] flex flex-col justify-between h-full select-none text-left transition-transform duration-200 shadow-none pl-[9px] pr-[9px]",
                             getSlotStyleByType(slot.type).bg,
-                            getSlotStyleByType(slot.type).border,
                             getSlotStyleByType(slot.type).text,
                             editMode && "hover:scale-[1.01]",
                             hasConflicts 
-                              ? "border-l-4 border-l-destructive pl-[6px] pr-[10px] bg-destructive/5 text-destructive"
-                              : "pl-[9px] pr-[9px]"
+                              ? "border-2 border-dashed border-amber-500/80"
+                              : getSlotStyleByType(slot.type).border
                           )}
                         >
                           <div className="min-w-0 flex items-center justify-between gap-2 w-full">
@@ -357,12 +393,44 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
                               })()}
                             </p>
                             {hasConflicts && (
-                              <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <button 
+                                    className="focus:outline-none p-0.5 rounded hover:bg-red-500/10 transition-colors shrink-0 cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <AlertTriangle className="h-3.5 w-3.5 text-red-500 fill-red-500/5" />
+                                  </button>
+                                </PopoverTrigger>
+                                <PopoverContent 
+                                  className="z-50 w-72 rounded-xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-950 shadow-md outline-none"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <div className="space-y-1 font-sans text-left">
+                                    <p className="font-semibold text-red-800 flex items-center gap-1.5 border-b border-red-200/60 pb-1 mb-1">
+                                      <AlertTriangle className="h-4 w-4 text-red-600" />
+                                      Scheduling Conflict
+                                    </p>
+                                    {cellConflicts.map((c, idx) => (
+                                      <div key={idx} className="flex items-start gap-1">
+                                        <span className="text-red-500 mt-0.5">•</span>
+                                        <span className="leading-tight">{c.message}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
                             )}
                           </div>
                           <div className="mt-1.5 text-[11px] font-normal opacity-80 leading-none truncate w-full">
                             ({slot.faculty}) - {slot.room}
                           </div>
+                        </div>
+                      ) : !slot ? (
+                        <div className="h-full border border-dashed border-gray-100 rounded-[10px] flex flex-col items-center justify-center bg-gray-50/10 p-2 text-center select-none min-h-[66px]">
+                          <span className="text-[10px] text-gray-400 font-normal italic tracking-tight opacity-60">
+                            No class scheduled
+                          </span>
                         </div>
                       ) : null}
                     </div>
