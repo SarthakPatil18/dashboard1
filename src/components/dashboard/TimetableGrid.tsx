@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash2, AlertTriangle, Sparkles, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trash2, AlertTriangle, Sparkles, Search } from "lucide-react";
 
 // Convert 24h format in mock data to AM/PM labels exactly as per specification
 const timeLabels: Record<string, string> = {
@@ -78,7 +78,6 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
   const currentSchedule = timetables[activeTimetableId] || {};
 
   // UI state
-  const [week, setWeek] = useState("Nov 1–6");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Editor states
@@ -248,28 +247,7 @@ export function TimetableGrid({ compact = false, editMode = false }: { compact?:
   return (
     <div className="bg-white rounded-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-6">
       {/* Top Bar controls inside the card */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E8E8] pb-4">
-        {/* Week navigation control */}
-        <div className="flex items-center gap-1.5 border border-[#e5e7eb] rounded-lg p-1 bg-gray-50/50">
-          <button
-            onClick={() => setWeek(week === "Nov 8–13" ? "Nov 1–6" : week === "Nov 15–20" ? "Nov 8–13" : "Nov 1–6")}
-            className="p-1 rounded hover:bg-gray-100 text-gray-600 transition h-7 w-7 flex items-center justify-center border-0 bg-transparent cursor-pointer"
-            title="Previous Week"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <span className="text-xs font-semibold text-gray-700 px-1 select-none">
-            Week of {week}
-          </span>
-          <button
-            onClick={() => setWeek(week === "Nov 1–6" ? "Nov 8–13" : week === "Nov 8–13" ? "Nov 15–20" : "Nov 15–20")}
-            className="p-1 rounded hover:bg-gray-100 text-gray-600 transition h-7 w-7 flex items-center justify-center border-0 bg-transparent cursor-pointer"
-            title="Next Week"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 border-b border-[#E8E8E8] pb-4">
         <div className="flex items-center gap-2 self-end sm:self-auto">
           {/* Search bar */}
           <div className="relative">
